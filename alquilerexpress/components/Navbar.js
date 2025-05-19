@@ -3,6 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import NavButton from "./NavButton";
 import HamburguerButton from "./HamburgerButton";
+import HamburgerAuthMenu from "./HamburgerAuthMenu";
 
 export default function Navbar() {
   return (
@@ -19,7 +20,8 @@ export default function Navbar() {
         <NavButton href="/contact"> Contact </NavButton>
     </nav>
 
-    // aca 
+    {/* // aca  */}
+    <HamburgerAuthMenu/>
     </div>
   );
 };

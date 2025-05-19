@@ -1,6 +1,8 @@
 import DBLocal from "db-local"
 import crypto, { hash } from "node:crypto"
 import bcrypt from 'bcrypt'
+import { userCreateSchema, userLoginSchema } from "./scheme/user-scheme.js"
+
 
 const { Schema  } = new DBLocal({ path: './db'})
 
@@ -14,6 +16,11 @@ export class UserRepository{
     static async create({ username ,password}) {
         //1- validaciones
         //utilizar zod
+        const parsed = userCreateSchema.safeParse({username, password})
+        if (!parsed.success) {
+            throw new Error(JSON.stringify(parsed.error.format()))
+        }
+
         // 2- ASEGURARSE QUE EL USERNAME NO EXISTE
         const user = await User.findOne({username})
         if(user) throw  new Error('Username ya existente')
@@ -31,10 +38,16 @@ export class UserRepository{
     static async login({username , password}) {
         //validaciones con zod
         //
+        const parsed = userLoginSchema.safeParse({username, password})
+        if (!parsed.success) {
+            throw new Error(JSON.stringify(parsed.error.format()))
+        }
 
         const user =await  User.findOne({username})
         if(!user) throw new Error('No existe tal usuario')
+            
         console.log('Usuario encontrado:', user);
+
         const isValid = await bcrypt.compare(password, user.password) //la encripta y compara con la encriptada
         if(!isValid) throw new Error('Contraseña invalida')
 

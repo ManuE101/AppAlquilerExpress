@@ -20,10 +20,10 @@ app.use(cors({
   credentials: true // para que las cookies funcionen si las usás
 }));
 app.use((req,res,next ) => {
-     const token = req.cookies.access_token
+    const token = req.cookies.access_token
      req.session = {user:null} // añado info a la peticion agregandole EL ATRIBUTO NULL SEA LA PETICION QEU SEA
 
-     try {
+    try {
         const data = jwt.verify(token , "boca") // boca tiene que ser .env
         req.session.user = data
     } catch{}
@@ -52,7 +52,7 @@ app.post("/login", async (req,res) => {
         res.cookie('access_token', token, {
             httpOnly: true,
             maxAge: 1000 * 60 * 60,
-              sameSite: 'lax'      
+                sameSite: 'lax'      
         })
         .send({user,token})
     } catch (error){
@@ -75,20 +75,20 @@ app.post("/register", async (req,res) => {
 })
 app.post("/logout", (req,res) => {
     res.clearCookie('access_token', {
-  httpOnly: true,
-  sameSite: 'lax' // o 'none' si usás HTTPS
+    httpOnly: true,
+    sameSite: 'lax' // o 'none' si usás HTTPS
 })
-  res.status(200).send('Logged out');
+    res.status(200).send('Logged out');
 
 })
 
 
 app.post("/protected", (req,res) => {
-   if (!req.session.user) {
+    if (!req.session.user) {
     return res.status(401).json({ message: "No autorizado" });
-  }
+}
   // Podés enviar lo que quieras sobre el usuario
-  res.json({ message: "Acceso autorizado", user: req.session.user });
+    res.json({ message: "Acceso autorizado", user: req.session.user });
 })
 
 app.use((req,res) => {

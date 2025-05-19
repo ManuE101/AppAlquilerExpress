@@ -6,12 +6,6 @@ const userCreateSchema = z.object({
     password: z.string().min(8, "La contraseña debe tener al menos 8 caracteres").max(20),
 });
 
-const userLoginSchema = z.object({
-    username: z.string().min(3).max(20),
-    password: z.string().min(8).max(20),
-});
-
 module.exports = {
-    userCreateSchema,
-    userLoginSchema
+    userCreateSchema
 };

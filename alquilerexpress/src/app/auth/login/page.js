@@ -10,7 +10,6 @@ export default function LoginPage() {
 
 
   async function handleSubmit(event) {
-      alert("boca")
       event.preventDefault();
   
       const formData = new FormData(event.target);
@@ -20,10 +19,10 @@ export default function LoginPage() {
       try {
         await loginFetch(username, password);
         alert("Good to go");
-        event.target.reset();  
-        router.push("/")
+        event.target.reset();
+        window.location.href = "/"; 
       } catch (err) {
-        alert(err.message);
+        alert("El usuario o la contraseña son incorrectos");
       }
     }
 

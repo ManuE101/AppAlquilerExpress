@@ -1,13 +1,6 @@
 import Image from "next/image";
 
 export default async function About() {
- //const res = await fetch('http://localhost:3000/api/is-auth')
-//const isLogged = await res.json()
-
-//if (!isLogged) {
-   // return <h1>No estás logeado</h1>;
-  //}
-
   return (
   <div>
     <div className="flex flex-col gap-4 w-3/4 m-auto">

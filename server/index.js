@@ -91,6 +91,15 @@ app.post("/protected", (req,res) => {
   res.json({ message: "Acceso autorizado", user: req.session.user });
 })
 
+app.get("/protected", (req, res) => {
+  const token = req.cookies.access_token;
+  if (!token) {
+    return res.status(401).json({ message: "No autorizado" });
+  }
+  // Aquí podrías validar el token si quieres
+  res.json({ loggedIn: true });
+});
+
 app.use((req,res) => {
     res.status(404).send('<h1> Boca </h1>')
 })

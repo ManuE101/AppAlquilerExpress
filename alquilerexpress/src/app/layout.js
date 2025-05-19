@@ -1,7 +1,5 @@
-import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
-import Link from "next/link";
 import Navbar from "../../components/Navbar";
+import "./globals.css";
 
 export const metadata = {
   title: "Create Next App",
@@ -12,10 +10,8 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
-        <Navbar/>
-        <div className="px-2">
-        {children}
-        </div>
+        <Navbar />
+        <div className="px-2">{children}</div>
       </body>
     </html>
   );

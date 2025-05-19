@@ -1,12 +1,18 @@
 "use client"
 
+import { useRouter } from "next/navigation";
+
 export default function LogoutPage() {
+  const router = useRouter();
+
   function handleClick() {
     console.log("Deslogeado")
+    alert("Deslogeado")
       fetch('http://localhost:8080/logout', {
       method: 'POST',
       credentials: 'include'  // ¡IMPORTANTE para que las cookies se envíen!
     });
+    router.push('/'); // Redirigir a la página de inicio
   }
 
 

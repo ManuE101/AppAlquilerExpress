@@ -3,7 +3,11 @@ import cookieParser from "cookie-parser"
 import express from "express"
 import z from "zod"
 import cors from "cors";
-
+import morgan from "morgan"
+// // SDK de Mercado Pago
+// import { MercadoPagoConfig, Preference } from 'mercadopago';
+// // Agrega credenciales
+// const client = new MercadoPagoConfig({ accessToken: 'APP_USR-412533297282542-052017-1f02203b19d8de48fdd23d1f95c44ff1-2448200083' });
 
 
 import { UserRepository }  from "./user-repository.js";
@@ -11,6 +15,7 @@ import { UserRepository }  from "./user-repository.js";
 const app = express();
 const PORT = process.env.PORT ?? 8080;
 
+app.use(morgan("dev")) // middleware para ver las peticiones que llegan al servidor
 
 //middle ware, funciones por las que se filtran las peticiones antes de llegar a la peticion real
 app.use(express.json()) // middleware express.json, te transforma el body de la req en json
@@ -107,3 +112,16 @@ app.use((req,res) => {
 app.listen(PORT , () => {
     console.log(`Server started on  ${PORT}`);
 })
+
+// desde aca es tutorial de mercado pago
+// const mercadoPagoRoutes = require('../routes/mercadoPago');
+
+// app.use(cors());
+// app.use(express.json());
+
+// // Ruta para generar la preferencia
+// app.use('/generar', mercadoPagoRoutes);
+
+// app.listen(PORT, () => {
+//   console.log(`Servidor corriendo en http://localhost:${PORT}`);
+// });

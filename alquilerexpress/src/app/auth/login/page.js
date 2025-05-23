@@ -22,6 +22,7 @@ export default function LoginPage() {
         event.target.reset();
         window.location.href = "/"; 
       } catch (err) {
+        console.error(err);
         alert("El usuario o la contraseña son incorrectos");
       }
     }

@@ -1,47 +1,77 @@
 "use client"
+import { type } from "os";
 import { useState } from "react";
+import { getFiltrados } from "../utils/inmuebles_fetch";
 
-export default function() {
+export default function FilterPanel({ onFiltrar }) {
   const [isVisible, setIsVisible] = useState(false);
-
+  // Un solo objeto para todos los filtros
+  const [filtros, setFiltros] = useState({});
+  // Opciones de filtro dinámicas
   const filterOptions = [
-  "Opción 1", "Opción 2", "Opción 3", "Opción 4", "Opción 5",
-  "Opción 6", "Opción 7", "Opción 8", "Opción 9", "Opción 10",
-  "Opción 11", "Opción 12", "Opción 13", "Opción 14", "Opción 15"
-];
+    { key: "habitaciones", label: "Habitaciones", min: 0, max: 10 , type: "range" },
+    { key: "precio", label: "Precio", min: 0, max: 1000000, type: "number" },
+    { key: "puntaje", label: "Puntaje", min: 0, max: 10, type: "range" },
+  ];
 
+  // Actualiza solo el filtro correspondiente
+  const handleChange = (key, value) => {
+    setFiltros(prev => ({
+      ...prev,
+      [key]: value === "" ? undefined : Number(value)
+    }));
+  };
 
-
-
+  const handleSubmit = () => {
+    setIsVisible(false);
+    // Elimina los filtros vacíos o undefined
+    const filtrosLimpiados = Object.fromEntries(
+      Object.entries(filtros).filter(([_, v]) => v !== undefined && v !== "")
+    );
+    onFiltrar(filtrosLimpiados);
+  };
 
   return (
-    <div className=" w-auto max-h-2/4">
-      {/* Botón para mostrar/ocultar el filtro */}
-      <button 
+    <div className="w-auto max-h-2/4">
+      <button
         className="bg-red-600 text-white px-4 py-1 rounded mt-4"
         onClick={() => setIsVisible(!isVisible)}
-      >  {isVisible ? "Ocultar filtros" : "Mostrar filtros"} {/*texto dentro del button*/}
+      >
+        {isVisible ? "Ocultar filtros" : "Mostrar filtros"}
       </button>
-
-      {/* Contenedor del filtro, con animación de altura */}
       <div className={`overflow-hidden transition-all duration-300 ${
         isVisible ? "h-auto absolute mr-2" : "h-0 opacity-0"
       }`}>
         <div className="bg-amber-900 p-4 mt-2 rounded-xl shadow-md">
           <h2 className="text-lg font-bold">Filtros</h2>
-        {/*Aca estaria haciendo un fetch de los filtros disponibles y poniendolos*/}
-        <div className="flex w-full h-full flex-wrap">
-            
-        {filterOptions.map((option) => (
-            <label key={option} className="block m-2">
-                     <input type="checkbox" onChange={() => toggleFilter(option)} />
-                    <span className="ml-2">{option}</span>
-                 </label>
-         ))}
-         </div>
-          <button className="mt-4 bg-amber-600 text-white px-4 py-2 rounded" onClick={() => setIsVisible(false)}>Aplicar Filtros</button>
+          <div className="flex w-full h-full flex-wrap">
+            {filterOptions.map(opt => (
+              <label key={opt.key} className="block m-2">
+                {opt.label}:
+                <input
+                  type={opt.type}
+                  min={opt.min}
+                  max={opt.max}
+                  value={filtros[opt.key] ?? ""}
+                  onChange={e => handleChange(opt.key, e.target.value)}
+                  className="text-black bg-amber-50 border border-gray-300 rounded"
+                />
+                {opt.type === "range" && ( // si es del tipo range, mostrar el valor
+                  <div className="text-xs text-white mt-1">
+                 Valor: {filtros[opt.key] ?? opt.min}
+                </div>
+                )}
+              </label>
+            ))}
+          </div>
+          <button
+            className="mt-4 bg-amber-600 text-white px-4 py-2 rounded"
+            onClick={handleSubmit}
+          >
+            Aplicar Filtros
+          </button>
         </div>
       </div>
     </div>
   );
-};
+}

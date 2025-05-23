@@ -1,7 +1,7 @@
 'use client'
 
 export async function registerFetch(username, password) {
-  const res = await fetch("http://localhost:8080/register", {
+  const res = await fetch("http://localhost:8080/user/register", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ username, password }),
@@ -17,7 +17,7 @@ export async function registerFetch(username, password) {
 
 
 export async function loginFetch(username,password) {
-    const res = await fetch('http://localhost:8080/login', {
+    const res = await fetch('http://localhost:8080/user/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password }),
@@ -31,7 +31,7 @@ export async function loginFetch(username,password) {
 }
 
 export async function logOutFetch() {
-  fetch('http://localhost:8080/logout', {
+  fetch('http://localhost:8080/user/logout', {
       method: 'POST',
       credentials: 'include'
     })

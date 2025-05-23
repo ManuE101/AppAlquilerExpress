@@ -1,7 +1,7 @@
 import DBLocal from "db-local"
 import crypto, { hash } from "node:crypto"
 import bcrypt from 'bcrypt'
-import { userCreateSchema} from "./scheme/user-scheme.js"
+import { userCreateSchema} from "../scheme/user-scheme.js"
 
 
 const { Schema  } = new DBLocal({ path: './db'})
@@ -36,7 +36,6 @@ export class UserRepository{
     }
 
     static async login({username , password}) {
-    
         const user =await  User.findOne({username})
         if(!user) throw new Error('No existe tal usuario')
            

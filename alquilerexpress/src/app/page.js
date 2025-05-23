@@ -13,8 +13,9 @@ export default function Home() {
   }, []);
 
   const handleFiltrar = async (filtros) => {
-    console.log("Filtros recibidos:", filtros);
+    console.log("Filtros aplicados:", filtros);
     const data = await getFiltrados(filtros);
+    console.log("Data filtrada:", data);
     setInmuebles(data);
   };
 

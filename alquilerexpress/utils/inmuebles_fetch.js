@@ -14,7 +14,7 @@ export async function getInmuebles() {
 
 export async function getFiltrados(filtrosLimpiados) {
     try {
-    const res = await fetch("http://localhost:8080/inmuebles-filter", {
+    const res = await fetch("http://localhost:8080/inmueble/inmuebles_filter", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -22,8 +22,7 @@ export async function getFiltrados(filtrosLimpiados) {
       body: JSON.stringify(filtrosLimpiados)
     });
     const data = await res.json();
-    console.log("Inmuebles filtrados:", data);
-    // Aquí puedes actualizar el estado de tu lista de inmuebles si lo necesitas
+    return data
   } catch (error) {
     console.error("Error al filtrar inmuebles:", error);
   }

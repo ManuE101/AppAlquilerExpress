@@ -27,26 +27,18 @@ router.get("/get_Inmuebles", async (req, res) => {
 
 router.post("/inmuebles_filter", async (req, res) => {
     const filters = req.body; // Recibe el JSON con los filtros
-
+    console.log("Filtros recibidos:", filters);
     try {
         const inmuebles = await InmuebleRepository.getAll(); // Trae todos
         // Filtra en memoria según los operadores recibidos
         const result = inmuebles.filter(inmueble => {
-            for (const key in filters) {
-                const value = filters[key];
-                if (typeof value === "object" && value !== null) {
-                    // Soporta operadores
-                    if ("$gt" in value && !(inmueble[key] > value["$gt"])) return false;
-                    if ("$gte" in value && !(inmueble[key] >= value["$gte"])) return false;
-                    if ("$lt" in value && !(inmueble[key] < value["$lt"])) return false;
-                    if ("$lte" in value && !(inmueble[key] <= value["$lte"])) return false;
-                    if ("$eq" in value && !(inmueble[key] === value["$eq"])) return false;
-                } else {
-                    // Igualdad simple
-                    if (inmueble[key] !== value) return false;
-                }
-            }
-            return true;
+            console.log("Inmueble:", inmueble.precio , typeof inmueble.precio);
+            console.log("Filtro:", filters.precio , typeof filters.precio);
+        return (
+            (inmueble.puntaje >= filters.puntaje || 0) &&
+            (inmueble.precio >= filters.precio || 0) &&
+           (inmueble.habitaciones >= filters.habitaciones || 0)
+            )
         });
         res.send(result);
     } catch (error) {

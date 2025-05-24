@@ -1,6 +1,7 @@
 import express from "express";
 import userRoutes from "./routes/user-routes.js";
 import inmuebleRoutes from "./routes/inmueble-routes.js";
+import reservaRoutes from "./routes/reservas-routes.js";
 import cookieParser from "cookie-parser"
 import cors from "cors";
 
@@ -32,6 +33,7 @@ app.use((req,res,next ) => {
 
 app.use("/user", userRoutes);        // Tus endpoints de usuario estarán bajo /user
 app.use("/inmueble", inmuebleRoutes); // Tus endpoints de inmueble bajo /inmueble
+//app.use("/reserva", reservaRoutes);
 
 
 app.listen(PORT , () => {

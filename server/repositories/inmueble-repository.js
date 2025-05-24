@@ -30,7 +30,23 @@ export class InmuebleRepository{
         }).save()
     }
    
-    static async getAll() { // con esto listas todos los inmuebles
-        return await Inmueble.find()
+    static async getAllNotReserved() { // con esto listas todos los inmuebles no reservados
+        const inmuebles = await Inmueble.find()
+        const result = inmuebles.filter(inmueble => {
+            return (
+                (inmueble.reservado === false) 
+            )
+        })
+        return result
+    }
+
+    static async getAll() {
+        const inmuebles = await Inmueble.find()
+        return inmuebles
+    }
+
+    static async getById(idParam) {
+        const inmueble = await Inmueble.findOne({ id: Number(idParam) })
+        return inmueble
     }
 }

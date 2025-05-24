@@ -7,7 +7,7 @@ export default function LogoutPage() {
 
   function handleClick() {
     console.log("Deslogeado")
-      fetch('http://localhost:8080/logout', {
+      fetch('http://localhost:8080/user/logout', {
       method: 'POST',
       credentials: 'include'  // ¡IMPORTANTE para que las cookies se envíen!
     });

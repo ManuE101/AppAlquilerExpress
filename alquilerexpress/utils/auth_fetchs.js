@@ -1,5 +1,3 @@
-'use client'
-
 export async function registerFetch(username, password) {
   const res = await fetch("http://localhost:8080/user/register", {
     method: "POST",

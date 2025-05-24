@@ -9,7 +9,7 @@ export default function Home() {
   const [inmuebles, setInmuebles] = useState([]);
 
   useEffect(() => {
-    getInmuebles().then(async (res) => setInmuebles(await res.json()));
+    getInmuebles().then(async (res) => setInmuebles(res));
   }, []);
 
   const handleFiltrar = async (filtros) => {
@@ -18,6 +18,8 @@ export default function Home() {
     console.log("Data filtrada:", data);
     setInmuebles(data);
   };
+
+ 
 
   return (
     <div className="mx-2 flex justify-start flex-col gap-4">
@@ -32,7 +34,7 @@ export default function Home() {
           </button>
         </h2>
       </div>
-      <Card inmuebles={inmuebles} />
+      <Card inmuebles={inmuebles}  />
     </div>
   );
 }

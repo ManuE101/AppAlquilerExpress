@@ -1,7 +1,7 @@
 import DBLocal from "db-local"
 import crypto, { hash } from "node:crypto"
 import bcrypt from 'bcrypt'
-import { userCreateSchema} from "../scheme/user-scheme.js"
+import { userCreateSchema } from "../scheme/user-scheme.js"
 
 
 const { Schema  } = new DBLocal({ path: './db'})

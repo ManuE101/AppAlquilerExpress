@@ -63,4 +63,19 @@ router.post("/reservas_usuario", async (req, res) => {
     }
 });
 
+router.get("/get_byID/:id", async (req, res) => {
+    const { id } = req.params;
+    console.log("ID recibido:", id);
+    try {
+        const inmueble = await InmuebleRepository.getById(id);
+        if (!inmueble) {
+            return res.status(404).json({ error: "Inmueble no encontrado" });
+        }
+        console.log("Inmueble encontrado:", inmueble);
+        res.json(inmueble);
+    } catch (error) {
+        res.status(500).json({ error: error.message }); // <-- SIEMPRE JSON
+    }
+});
+
 export default router;

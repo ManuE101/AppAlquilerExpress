@@ -47,3 +47,37 @@ export async function getReservas(id_Cliente) {
         console.error("Error al filtrar inmuebles:", error);
     }
 }
+
+export async function getInmuebleById(id) {
+    try {
+        const res = await fetch(`http://localhost:8080/inmueble/get_byID/${id}`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            credentials: "include"
+        });
+        const data = await res.json();
+        return data
+    } catch (error) {
+        console.error("Error al filtrar inmuebles:", error);
+    }
+}
+
+
+export async function hacerReserva(id_inmueble) {
+    try {
+        const res = await fetch("http://localhost:8080/reserva/make_reserva", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            credentials: "include",
+            body: JSON.stringify({id_inmueble , fecha_inicio: "2023-11-01", fecha_fin: "2023-11-05"})
+        });
+        const data = await res.json();
+        return data
+    } catch (error) {
+        console.error("Error al filtrar inmuebles:", error);
+    }
+}

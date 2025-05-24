@@ -19,6 +19,8 @@ export default function Home() {
     setInmuebles(data);
   };
 
+ 
+
   return (
     <div className="mx-2 flex justify-start flex-col gap-4">
       <FilterPanel onFiltrar={handleFiltrar} />
@@ -32,7 +34,7 @@ export default function Home() {
           </button>
         </h2>
       </div>
-      <Card inmuebles={inmuebles} />
+      <Card inmuebles={inmuebles}  />
     </div>
   );
 }

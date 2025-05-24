@@ -7,7 +7,7 @@ import Link from "next/link";
 export default async function Reservas() {
   //Hago esto sino las cookies no viajan como deberian
   const cookieStore = cookies();
-  const accessToken = cookieStore.get("access_token")?.value;
+  const accessToken = await cookieStore.get("access_token")?.value;
   const user = await getUser(accessToken);
   const inmuebles = await getReservas(user.id);
 

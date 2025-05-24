@@ -4,10 +4,6 @@ import inmuebleRoutes from "./routes/inmueble-routes.js";
 import cookieParser from "cookie-parser"
 import cors from "cors";
 
-// ...otros imports...
-
-const app = express();
-// ...middlewares...
 //middle ware, funciones por las que se filtran las peticiones antes de llegar a la peticion real
 app.use(cors({
   origin: "http://localhost:3000", // o '*', pero es menos seguro
@@ -44,4 +40,4 @@ app.listen(PORT , () => {
 app.use((req,res) => {
     res.status(404).send('<h1> Boca </h1>')
 })
-// ...otros endpoints globales o middlewares...
+

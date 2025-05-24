@@ -5,19 +5,19 @@ import cookieParser from "cookie-parser"
 import cors from "cors";
 
 //middle ware, funciones por las que se filtran las peticiones antes de llegar a la peticion real
-app.use(express.json()) // middleware express.json, te transforma el body de la req en json
-app.use(cookieParser()) // otro middleware que nos permite modificar las cookies
 app.use(cors({
   origin: "http://localhost:3000", // o '*', pero es menos seguro
   credentials: true // para que las cookies funcionen si las usás
 }));
+app.use(express.json()) // middleware express.json, te transforma el body de la req en json
+app.use(cookieParser()) // otro middleware que nos permite modificar las cookies
 const PORT = process.env.PORT ?? 8080;
 
 // Middleware para verificar el token en las cookies en cada petición
 app.use((req,res,next ) => {
      const token = req.cookies.access_token
+     console.log(token)
      req.session = {user:null} // añado info a la peticion agregandole EL ATRIBUTO NULL SEA LA PETICION QEU SEA
-
      try {
         const data = jwt.verify(token , "boca") // boca tiene que ser .env
         req.session.user = data

@@ -9,27 +9,35 @@ export default function AuthMenu({ onClose , isLoggedIn}) {
         <>
           <Link
             href="/auth/login"
-            className="bg-white text-red-800 px-3 py-1 rounded hover:bg-gray-200"
+            className="bg-red-900 text-white px-3 py-1 rounded hover:bg-red-700"
             onClick={onClose}
           >
             Login
           </Link>
           <Link
             href="/auth/register"
-            className="bg-white text-red-800 px-3 py-1 rounded hover:bg-gray-200"
+            className="bg-red-900 text-white px-3 py-1 rounded hover:bg-red-700"
             onClick={onClose}
           >
             Register
           </Link>
         </>
-      ) : (
+      ) : (<>
         <Link
-          href="/auth/logout"
-          className="bg-red-900 text-white px-3 py-1 rounded hover:bg-red-700"
-          onClick={onClose}
+        href="/user/profile"
+        className="bg-red-900 text-white px-3 py-1 rounded hover:bg-red-700"
+        onClick={onClose}
+        >
+          Profile
+        </Link>
+        <Link
+        href="/auth/logout"
+        className="bg-red-900 text-white px-3 py-1 rounded hover:bg-red-700"
+        onClick={onClose}
         >
           Logout
         </Link>
+          </>
       )}
     </div>
   );

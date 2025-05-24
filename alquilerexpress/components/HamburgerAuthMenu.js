@@ -8,7 +8,7 @@ export default function HamburgerAuthMenu() {
   const [loggedIn, setLoggedIn] = useState(false);
 
   const handleClick = () => {
-    fetch("http://localhost:8080/protected", { credentials: "include" })
+    fetch("http://localhost:8080/user/protected", { credentials: "include" })
       .then((res) => {
         if (res.ok) {
           setLoggedIn(true);

@@ -9,7 +9,7 @@ export default function Home() {
   const [inmuebles, setInmuebles] = useState([]);
 
   useEffect(() => {
-    getInmuebles().then(async (res) => setInmuebles(await res.json()));
+    getInmuebles().then(async (res) => setInmuebles(res));
   }, []);
 
   const handleFiltrar = async (filtros) => {

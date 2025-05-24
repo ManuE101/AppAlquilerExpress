@@ -44,4 +44,9 @@ export class InmuebleRepository{
         const inmuebles = await Inmueble.find()
         return inmuebles
     }
+
+    static async getById(idParam) {
+        const inmueble = await Inmueble.findOne({ id: Number(idParam) })
+        return inmueble
+    }
 }

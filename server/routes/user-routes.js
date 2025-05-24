@@ -6,7 +6,6 @@ import express from "express"
 const router = express.Router();
 import { UserRepository }  from "../repositories/user-repository.js";
 
-const app = express();
 
 
 
@@ -20,7 +19,9 @@ router.post("/login", async (req,res) => {
     try {
         const user = await UserRepository.login({username,password})
         const token = jwt.sign(
-        {username: user.username} ,
+        {username: user.username,
+          id: user._id,
+        } ,
         "boca" ,  // BOCA NO DEBERIA VERSE EN PRODUCCION
         {
             expiresIn: '8h'
@@ -28,7 +29,8 @@ router.post("/login", async (req,res) => {
         res.cookie('access_token', token, {
             httpOnly: true,
             maxAge: 1000 * 60 * 60,
-              sameSite: 'lax'      
+            sameSite: 'lax',
+            path: '/',
         })
         .send({user,token})
     } catch (error){
@@ -76,6 +78,21 @@ router.get("/protected", (req, res) => {
   res.json({ loggedIn: true });
 });
 
+router.get("/get_user", (req, res) => {
+  console.log("Cookies recibidas:", req.cookies);
+  const token = req.cookies.access_token;
+  console.log(token)
+  if (!token) {
+    return res.status(401).json({ message: "No autorizado" });
+  }
+  try {
+    const decoded = jwt.verify(token, "boca"); // Usá tu secret real en producción
+    // decoded.username, decoded.id, etc.
+    res.json(decoded);
+  } catch (err) {
+    res.status(401).json({ message: "Token inválido" });
+  }
+});
 
 
 

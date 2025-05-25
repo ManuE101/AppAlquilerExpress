@@ -48,7 +48,7 @@ export async function getReservas(id_Cliente) {
     }
 }
 
-export async function getInmuebleById(id) {
+/* export async function getInmuebleById(id) {
     try {
         const res = await fetch(`http://localhost:8080/inmueble/get_byID/${id}`, {
             method: "GET",
@@ -62,6 +62,28 @@ export async function getInmuebleById(id) {
     } catch (error) {
         console.error("Error al filtrar inmuebles:", error);
     }
+} */
+
+export async function getInmuebleById(id) {
+  try {
+    const res = await fetch(`http://localhost:8080/inmueble/get_byID/${id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!res.ok) {
+      console.error("Respuesta inválida al obtener inmueble:", res.status);
+      return null;
+    }
+
+    const data = await res.json();
+    return data;
+  } catch (error) {
+    console.error("Error al obtener inmueble por ID:", error);
+    return null;
+  }
 }
 
 

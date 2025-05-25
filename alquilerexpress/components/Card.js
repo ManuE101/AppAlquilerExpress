@@ -1,19 +1,19 @@
-"use client";
+ "use client";
 
-import Image from "next/image";
-import { useRouter } from "next/navigation";
-
-
+ import Image from "next/image";
+ import { useRouter } from "next/navigation";
 
 
-export default function Card({ inmuebles = []}) {
 
-  const router = useRouter();
 
- const handleClickOnMueble = (id) => {
-    console.log("Click en mueble" , id);
-    router.push(`/inmueble/${id}`);
-  }
+ export default function Card({ inmuebles = []}) {
+
+   const router = useRouter();
+
+  const handleClickOnMueble = (id) => {
+     console.log("Click en mueble" , id);
+     router.push(`/inmueble/${id}`);
+   }
   
   return (
     <div className="flex flex-col w-full m-auto sm:h-screen gap-4 text-black ">

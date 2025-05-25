@@ -1,12 +1,12 @@
 import { cookies } from "next/headers";
 import { getReservas } from "../../../../utils/inmuebles_fetch";
 import { getUser } from "../../../../utils/user_fetchs";
-import Card from "../../../../components/Card";
+import ReserveCard from "../../../../components/Reserve_card";
 import Link from "next/link";
 
 export default async function Reservas() {
   //Hago esto sino las cookies no viajan como deberian
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
   const accessToken = await cookieStore.get("access_token")?.value;
   const user = await getUser(accessToken);
   const inmuebles = await getReservas(user.id);
@@ -22,7 +22,7 @@ export default async function Reservas() {
       </Link>
       <div className="flex flex-col items-center justify-center h-auto text-black">
         <h1 className="text-2xl font-bold mb-4">Reservas</h1>
-        <Card inmuebles={inmuebles} />
+        <ReserveCard reserves={inmuebles} />
       </div>
     </div>
   );

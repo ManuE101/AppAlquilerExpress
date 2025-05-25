@@ -1,6 +1,6 @@
 "use client";
 
-import { getReservasCanceladas, hacerReserva } from "../utils/inmuebles_fetch";
+import { getReservasCanceladas } from "../utils/inmuebles_fetch";
 import { getInmuebleById } from "../utils/inmuebles_fetch";
 
 export default function ReembolsoButton({ id_reserva }) {

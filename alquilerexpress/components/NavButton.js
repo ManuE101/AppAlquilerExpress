@@ -5,7 +5,7 @@ const NavButton = ({ href, children, onClick }) => {
   return (
     <Link 
       href={href} 
-      className="bg-red-700 text-white text-l px-4  rounded hover:bg-red-600 transition flex items-center"
+      className="bg-red-700 text-white text-l p-3 px-4  rounded hover:bg-red-600 transition flex items-center"
       onClick={onClick}
     >
       {children}

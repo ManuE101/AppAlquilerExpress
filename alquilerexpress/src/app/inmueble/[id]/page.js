@@ -33,7 +33,7 @@ export default async function Page({params}) {
             alt="Imagen del inmueble"
           />
         </div>
-            <ReservaButton id_inmueble= {id}/>
+            <ReservaButton id_inmueble={inmueble._id} />
       </div>
     </div>
   );

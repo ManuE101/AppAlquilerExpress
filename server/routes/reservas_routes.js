@@ -1,6 +1,7 @@
 import express from "express";
 import jwt from "jsonwebtoken";
 import { ReservaRepository } from "../repositories/reservas_repository.js";
+//import { use } from "react";
 
 const router = express.Router();
 
@@ -32,5 +33,64 @@ router.post("/make_reserva", async (req, res) => {
         res.status(400).send(error.message);
     }
 });
+
+router.post("/reservas_usuario", async (req, res) => {
+    const user_id = req.body;
+    console.log("id recibidos:", user_id);
+    try {
+        const reservas = await ReservaRepository.getAll();
+        const result = reservas.filter(reserva => {
+            console.log("id reserva:", reserva.user_id);
+            console.log("id cliente:", user_id);
+            console.log("estado:", reserva.estado);
+        return (
+            (reserva.user_id === user_id.id_Cliente &&
+            reserva.estado === 'activa') 
+            )
+        });
+        console.log(result)
+        res.send(result);
+    } catch (error) {
+        res.status(400).send(error.message);
+    }
+});
+
+router.patch("/cancelar_reserva", async (req, res) => {
+    const { id_reserva } = req.body;
+    console.log("id recibido:", id_reserva);
+    try{
+        const aux = await ReservaRepository.cancel(id_reserva);
+        if (!aux.ok) {
+        console.log(aux.error);
+        return res.status(400).json({error: aux.error});
+        }
+        console.log(aux)
+        res.send({id_reserva: aux.id_Reserva});
+    } catch (error){
+        console.error("Error al cancelar la reserva:", error);
+        res.status(400).send(error.message);
+    }
+})
+
+router.post("/reservas_usuario_canceladas", async (req, res) => {
+    const user_id = req.body;
+    try {
+        const reservas = await ReservaRepository.getAll();
+        const result = reservas.filter(reserva => {
+            console.log("id reserva:", reserva.user_id);
+            console.log("id cliente:", user_id);
+            console.log("estado:", reserva.estado);
+        return (
+            (reserva.user_id === user_id.id_Cliente &&
+            reserva.estado === 'cancelada')
+        )
+        });
+        console.log(result)
+        res.send(result);
+    } catch (error) {
+        res.status(400).send(error.message);
+    }
+})
+
 
 export default router;

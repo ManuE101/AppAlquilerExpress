@@ -49,7 +49,18 @@ export class ReservaRepository{
         return { ok: true, id_Reserva: idX };
     }
 
-    //static async cancel({in_id, us_id, fecha_inicio, fecha_fin}){
+    static async getAll(){
+        const reservas = await Reserva.find()
+        return reservas
+    }
 
-    //}
+    static async cancel({id_reserva}){
+        console.log(id_reserva)
+        const reserva = await Reserva.findOne({id_reserva});
+        if(!reserva) throw new Error("Reserva no encontrada");
+        reserva.estado = 'cancelada';
+        await reserva.save();
+        return { ok: true, id_Reserva: id_reserva};
+    }
+    
 }

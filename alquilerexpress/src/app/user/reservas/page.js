@@ -1,15 +1,27 @@
-import { cookies } from "next/headers";
+"use client";
+import { useEffect, useState } from "react";
 import { getReservas } from "../../../../utils/inmuebles_fetch";
 import { getUser } from "../../../../utils/user_fetchs";
 import ReserveCard from "../../../../components/Reserve_card";
 import Link from "next/link";
 
-export default async function Reservas() {
-  //Hago esto sino las cookies no viajan como deberian
-  const cookieStore = await cookies();
-  const accessToken = await cookieStore.get("access_token")?.value;
-  const user = await getUser(accessToken);
-  const inmuebles = await getReservas(user.id);
+export default function Reservas() {
+  const [inmuebles, setInmuebles] = useState([]);
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    async function fetchData() {
+      const accessToken = document.cookie
+        .split("; ")
+        .find((row) => row.startsWith("access_token="))
+        ?.split("=")[1];
+      const userData = await getUser(accessToken);
+      setUser(userData);
+      const reservas = await getReservas(userData.id);
+      setInmuebles(reservas);
+    }
+    fetchData();
+  }, []);
 
   return (
     <div className="flex flex-col w-4/6  m-auto h-auto text-black">
@@ -22,7 +34,12 @@ export default async function Reservas() {
       </Link>
       <div className="flex flex-col items-center justify-center h-auto text-black">
         <h1 className="text-2xl font-bold mb-4">Reservas</h1>
-        <ReserveCard reserves={inmuebles} />
+        <ReserveCard
+          reserves={inmuebles}
+          onCancelReserva={(id) =>
+            setInmuebles((prev) => prev.filter((r) => r._id !== id))
+          }
+        />
       </div>
     </div>
   );

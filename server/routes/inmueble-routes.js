@@ -5,10 +5,10 @@ const router = express.Router();
 
 
 router.post("/create_inmueble", async (req, res) => {
-    const { titulo, desc, puntaje, precio, habitaciones, domicilio, imagen } = req.body;
+    const { titulo, desc, puntaje, precio, habitaciones, politica, domicilio, imagen } = req.body;
 
     try {
-        const id = await InmuebleRepository.create({ titulo, desc, puntaje, precio, habitaciones, domicilio, imagen });
+        const id = await InmuebleRepository.create({ titulo, desc, puntaje, precio, habitaciones, politica, domicilio, imagen });
         res.send("Inmueble creado");
     } catch (error) {
         res.status(400).send(error.message);

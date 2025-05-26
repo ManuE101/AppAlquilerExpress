@@ -55,8 +55,7 @@ export class ReservaRepository{
     }
 
     static async cancel({id_reserva}){
-        console.log(id_reserva)
-        const reserva = await Reserva.findOne({id_reserva});
+        const reserva = await Reserva.findOne({_id: id_reserva});
         if(!reserva) throw new Error("Reserva no encontrada");
         reserva.estado = 'cancelada';
         await reserva.save();

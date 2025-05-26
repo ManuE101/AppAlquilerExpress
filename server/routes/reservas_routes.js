@@ -44,8 +44,8 @@ router.post("/reservas_usuario", async (req, res) => {
             console.log("id cliente:", user_id);
             console.log("estado:", reserva.estado);
         return (
-            (reserva.user_id === user_id.id_Cliente &&
-            reserva.estado === 'activa') 
+            (reserva.user_id === user_id.id_Cliente) &&
+            (reserva.estado === 'activa') 
             )
         });
         console.log(result)
@@ -59,12 +59,11 @@ router.patch("/cancelar_reserva", async (req, res) => {
     const { id_reserva } = req.body;
     console.log("id recibido:", id_reserva);
     try{
-        const aux = await ReservaRepository.cancel(id_reserva);
+        const aux = await ReservaRepository.cancel({id_reserva}); // tenias que mandarlo como {}
         if (!aux.ok) {
         console.log(aux.error);
         return res.status(400).json({error: aux.error});
         }
-        console.log(aux)
         res.send({id_reserva: aux.id_Reserva});
     } catch (error){
         console.error("Error al cancelar la reserva:", error);

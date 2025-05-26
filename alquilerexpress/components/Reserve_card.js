@@ -33,6 +33,7 @@ export default function ReserveCard({ reserves = []}) {
             <p>Fecha Inicio: {item.fecha_inicio}</p>
             <p>Fecha Fin: {item.fecha_fin}</p>
             {item.estado === "activa" && <CancelButton id_reserva={item._id} />}
+            {item.estado === "cancelada" && <ReembolsoButton id_reserva={item._id} />}
           </div>
         </div>
       ))}

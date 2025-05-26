@@ -11,12 +11,13 @@ const Inmueble = Schema('Inmueble' , {
     puntaje: { type: Number, required: true},
     precio: { type: Number, required: true},
     habitaciones: { type: Number, required: true},
+    politica: { type: Number, required: true},
     domicilio: { type: String, required: true},
     imagen: { type: String, required: true},
 })
 
 export class InmuebleRepository{
-    static async create({ titulo ,desc, puntaje, precio, habitaciones, domicilio, imagen}) {
+    static async create({ titulo ,desc, puntaje, precio, habitaciones, politica, domicilio, imagen}) {
         const idX = crypto.randomUUID();
         Inmueble.create({
             _id: idX,
@@ -25,6 +26,7 @@ export class InmuebleRepository{
             puntaje,
             precio,
             habitaciones,
+            politica,
             domicilio,
             imagen
         }).save()

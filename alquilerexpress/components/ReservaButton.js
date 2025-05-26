@@ -4,11 +4,8 @@ import { hacerReserva } from "../utils/inmuebles_fetch";
 
 export default function ReservaButton({ id_inmueble }) {
   async function handleClick() {
-    "use server";
     try {
       console.log("Haciendo reserva para el inmueble con ID:", id_inmueble);
-
-      // registrar reserva
       const reserva = await hacerReserva(id_inmueble);
 
       if (reserva?.error) {
@@ -17,9 +14,6 @@ export default function ReservaButton({ id_inmueble }) {
         return;
       }
 
-      console.log("Reserva registrada:", reserva);
-
-      // generar preferencia de pago
       const pagoRes = await fetch("/api/pagar", {
         method: "POST",
         headers: {

@@ -8,7 +8,9 @@ const nextConfig = {
             {hostname: "www.casasdeplaya.com.ar"},
             {hostname: "encrypted-tbn0.gstatic.com"},
             {hostname: "mylovelyapart.com"},
-            {hostname: "geriatricos.portalgeriatrico.com.ar"}
+            {hostname: "geriatricos.portalgeriatrico.com.ar"},
+            {hostname: "diarionucleo.com"},
+            {hostname: "cipollettidigital.com.ar"}
         ]
     }
 };

@@ -6,7 +6,7 @@ import HamburgerAuthMenu from "./HamburgerAuthMenu";
 
 export default function Navbar() {
   return (
-    <div className="w-full bg-red-800 p-4 flex justify-between">
+    <div className="w-full bg-red-800 p-4 flex justify-between items-center">
       <div className="flex align-center md:relative md:w-16 md:h-16 w-10 h-auto">
         <Image alt="boca" src="/vercel.svg" width={160} height={160}></Image>
       </div>

@@ -29,16 +29,6 @@ export class InmuebleRepository{
             imagen
         }).save()
     }
-   
-    static async getAllNotReserved() { // con esto listas todos los inmuebles no reservados
-        const inmuebles = await Inmueble.find()
-        const result = inmuebles.filter(inmueble => {
-            return (
-                (inmueble.reservado === false) 
-            )
-        })
-        return result
-    }
 
     static async getAll() {
         const inmuebles = await Inmueble.find()

@@ -12,12 +12,11 @@
      getInmuebles().then(async (res) => setInmuebles(res));
    }, []);
 
-   const handleFiltrar = async (filtros) => {
-     console.log("Filtros aplicados:", filtros);
-     const data = await getFiltrados(filtros);
-     console.log("Data filtrada:", data);
-     setInmuebles(data);
-   };
+  const handleFiltrar = async (filtros) => {
+    const data = await getFiltrados(filtros);
+    console.log("Data filtrada:", data);
+    setInmuebles(data);
+  };
 
  
 

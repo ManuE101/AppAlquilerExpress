@@ -1,40 +1,52 @@
 import Image from "next/image";
 import Card from "../../../../components/Card";
 import { getInmuebleById } from "../../../../utils/inmuebles_fetch";
-import  ReservaButton  from "../../../../components/ReservaButton";
+import ReservaButton from "../../../../components/ReservaButton";
+import InmuebleMap from "../../../../components/InmuebleMap";
 
-export default async function Page({params}) {
-  const {id} =  await params;
+export default async function Page({ params }) {
+  const { id } = await params;
   const inmueble = await getInmuebleById(id);
-
+  console.log(inmueble.desc , id , inmueble);
 
   return (
-    <div className="flex flex-col pt-2.5 md:p-5 items-center justify-center h-auto text-black">
-      <div className="flex flex-col sm:flex-row w-full h-full">
-        <div className="w-3/5 flex flex-col p-2.5 md:p-5 space-y-2.5">
-          <div className="flex flex-col md:flex-row w-full items-start md:items-center sm:justify-between gap-2">
-            <h1 className="text-[24px] font-bold">{inmueble.domicilio}</h1>
-            <h2 className="text-[18px] font-semibold text-neutral-700">{`USD ${inmueble.precio}`}</h2>
+    <div className="flex flex-col md:flex-row w-full max-w-6xl mx-auto p-4 gap-6 bg-white text-black rounded shadow">
+      {/* Columna principal */}
+      <div className="flex-1 px-2">
+        <img
+          src={inmueble.imagen}
+          alt="Imagen del inmueble"
+          className="w-full h-72 object-cover rounded"
+        />
+      <div className="flex flex-row flex-wrap md:flex-nowrap">
 
-          </div>
-          <div className="flex flex-col space-y-2 mt-2.5">
-            <p className="text-xs text-neutral-600">{inmueble.titulo}</p>
-            <p className="text-sm text-neutral-600">{inmueble.descripcion}</p>
-            <p className="text-sm font-bold text-neutral-800">{`Habitaciones: ${inmueble.habitaciones}`}</p>
-            <p className={inmueble.reservado ? "py-1.5 px-2 w-max text-xs text-red-700 bg-red-300 font-semibold rounded" : "py-1.5 px-2 text-green-700 w-max text-xs bg-green-300 font-semibold rounded"}>{
-              inmueble.reservado ? "Reservado" : "Disponible"
-              }</p>
-          </div>
+       <div className=" flex flex-col w-full">
+        <h1 className="text-2xl font-bold mt-4">{inmueble.domicilio}</h1>
+        <h2 className="text-lg text-neutral-700 mb-2">{inmueble.titulo}</h2>
+        <h3 className="text-xl font-semibold text-green-700 mb-2">{`Por semana  $${inmueble.precio}`}</h3>
+        <div className="my-2">
+          <p className="font-bold">Descripción:</p>
+          <p className="text-neutral-600">{inmueble.descripcion}</p>
         </div>
-        <div className="h-[250px] w-2/5 relative">
-          <img 
-            src={inmueble.imagen}
-            className="object-cover w-full h-full"
-            alt="Imagen del inmueble"
-          />
+          <span className={inmueble.disponible
+            ? "py-1.5 px-2 text-green-700 w-max text-xs bg-green-300 font-semibold rounded"
+            : "py-1.5 px-2 w-max text-xs text-red-700 bg-red-300 font-semibold rounded"}>
+            {inmueble.disponible ? "Disponible" : "En Refacción"}
+          </span>
+        <div className="mt-4">
+          <ReservaButton id_inmueble={id} />
         </div>
-            <ReservaButton id_inmueble={inmueble._id} />
+        </div>
+        <div className="flex flex-col gap-2 p-4 items-end w-full">
+              <div className="w-full md:w-2/3  flex flex-col gap-4 ">
+                <div className="h-60 w-full rounded overflow-hidden border">
+                  <InmuebleMap direccion={inmueble.domicilio} />
+                </div>
+              </div>
+          </div>
+         </div>
       </div>
+
     </div>
   );
 }

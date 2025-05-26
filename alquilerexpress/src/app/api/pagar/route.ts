@@ -3,7 +3,7 @@ import { getInmuebleById } from "../../../../utils/inmuebles_fetch";
 import { Preference, MercadoPagoConfig } from "mercadopago";
 
 const mercadopago = new MercadoPagoConfig({
-  accessToken: process.env.MP_ACCESS_TOKEN!,
+  accessToken: "APP_USR-412533297282542-052017-1f02203b19d8de48fdd23d1f95c44ff1-2448200083",
 });
 
 export async function POST(req: Request) {
@@ -17,6 +17,8 @@ export async function POST(req: Request) {
     }
 
     const inmueble = await getInmuebleById(productoId);
+    console.log("Inmueble obtenido en el botonsitooo:", inmueble);
+
 
     if (!inmueble || !inmueble.precio || !inmueble.titulo) {
       console.error("Inmueble inválido o incompleto:", inmueble);
@@ -34,11 +36,11 @@ export async function POST(req: Request) {
           },
         ],
         metadata: {
-          productoId: inmueble._id || productoId,
+          productoId: inmueble.id || productoId,
         },
         back_urls: {
-          success: `${process.env.NEXT_PUBLIC_BASE_URL}/confirmacion?id=${productoId}`,
-          failure: `${process.env.NEXT_PUBLIC_BASE_URL}/error`,
+            success: 'https://www.lalibertadavanza.org/',
+            failure: 'https://www.lalibertadavanza.org/'
         },
         auto_return: "approved",
       },
@@ -46,7 +48,7 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ init_point: preference.init_point });
   } catch (error: any) {
-    console.error("Error interno al crear preferencia MP:", error.message || error);
+   console.error("Error interno al crear preferencia MP:", error);
     return NextResponse.json({ error: "Error interno del servidor" }, { status: 500 });
   }
 }

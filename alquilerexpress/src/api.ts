@@ -50,10 +50,10 @@ const api = {
           metadata: {
             productoId: inmueble._id,
           },
-        back_urls: {
-            success: `${process.env.NEXT_PUBLIC_BASE_URL}/confirmacion?id=${inmueble._id}`,
-            failure: `${process.env.NEXT_PUBLIC_BASE_URL}/error`,
-        },
+          back_urls: {
+                    success: `http://localhost:3000/confirmation`,
+                    failure: `http://localhost:3000/error`,
+                  },
         auto_return: "approved",
         },
       });

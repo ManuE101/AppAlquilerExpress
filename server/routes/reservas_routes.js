@@ -5,9 +5,30 @@ import { ReservaRepository } from "../repositories/reservas_repository.js";
 
 const router = express.Router();
 
+router.get('/reserva/check', async (req, res) => {
+  try {
+    const { id_inmueble, fecha_inicio, fecha_fin } = req.query;
+    if (!id_inmueble || !fecha_inicio || !fecha_fin) {
+      return res.status(400).json({ ok: false, error: "Parámetros requeridos: id_inmueble, fecha_inicio, fecha_fin" });
+    }
+
+    // Usamos el método del repo para chequear disponibilidad
+    const disponibilidad = await ReservaRepository.puedeReservar({ id_inmueble, fecha_inicio, fecha_fin });
+
+    if (!disponibilidad.ok) {
+      return res.json(disponibilidad);
+    }
+
+    return res.json({ ok: true, message: "Disponible para reservar" });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ ok: false, error: "Error interno del servidor" });
+  }
+});
 
 router.post("/make_reserva", async (req, res) => {
-    const token = req.cookies.access_token;
+    const token = req.cookies.access_token || req.headers.authorization?.split(' ')[1];
+
     const decoded = jwt.verify(token, "boca"); // decodeo el token
  
     

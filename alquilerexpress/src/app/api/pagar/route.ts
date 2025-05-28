@@ -1,12 +1,17 @@
 import { NextResponse } from "next/server";
 import { getInmuebleById } from "../../../../utils/inmuebles_fetch";
 import { Preference, MercadoPagoConfig } from "mercadopago";
+import { cookies } from "next/headers"; // ✅ importás el helper
 
 const mercadopago = new MercadoPagoConfig({
   accessToken: "APP_USR-412533297282542-052017-1f02203b19d8de48fdd23d1f95c44ff1-2448200083",
 });
 
+
 export async function POST(req: Request) {
+  const cookieStore = await cookies(); // 👈 obtenés las cookies del request
+  const token = cookieStore.get("access_token")?.value; // 👈 accedés al token
+  
   try {
     const body = await req.json();
     const { productoId } = body;
@@ -17,8 +22,7 @@ export async function POST(req: Request) {
     }
 
     const inmueble = await getInmuebleById(productoId);
-    console.log("Inmueble obtenido en el botonsitooo:", inmueble);
-
+    console.log("Inmueble obtenido:", inmueble);
 
     if (!inmueble || !inmueble.precio || !inmueble.titulo) {
       console.error("Inmueble inválido o incompleto:", inmueble);
@@ -39,16 +43,17 @@ export async function POST(req: Request) {
           productoId: inmueble.id || productoId,
         },
         back_urls: {
-            success: 'https://www.lalibertadavanza.org/',
-            failure: 'https://www.lalibertadavanza.org/'
+          success: `https://2lt3mks5-3000.brs.devtunnels.ms/confirmation?id=${productoId}&token=${token}`,
+          failure: 'https://2lt3mks5-3000.brs.devtunnels.ms/failure',
         },
+        external_reference: token,
         auto_return: "approved",
       },
     });
 
     return NextResponse.json({ init_point: preference.init_point });
   } catch (error: any) {
-   console.error("Error interno al crear preferencia MP:", error);
+    console.error("Error interno al crear preferencia MP:", error);
     return NextResponse.json({ error: "Error interno del servidor" }, { status: 500 });
   }
 }

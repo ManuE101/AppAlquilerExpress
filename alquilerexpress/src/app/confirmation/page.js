@@ -1,35 +1,26 @@
-import { InmuebleRepository } from "../../lib/InmuebleRepository";
-import { getInmuebleById } from "../utils/inmuebles_fetch";
+import { get } from "http";
+import { getInmuebleById, hacerReserva } from "../../../utils/inmuebles_fetch";
+
 
 
 export default async function ConfirmacionPage({ searchParams }) {
   const id = searchParams?.id;
-
-  if (!id) {
-    return <p>ID de inmueble no válido.</p>;
-  }
-
-  try {
-    const inmueble = await getInmuebleById(id);
-
-    if (!inmueble) {
-      return <p>Inmueble no encontrado.</p>;
-    }
-
-    // Marcar como reservado
-    inmueble.reservado = true;
-    await inmueble.save();
-
+  console.log("ID de inmueble recibido:", id);
+  const reserva = await hacerReserva(id);
+  const inmueble = await getInmuebleById(id);
+ 
     return (
-      <div className="p-10 text-center">
-        <h1 className="text-2xl font-bold text-green-700">
-          ¡Reserva confirmada!
-        </h1>
-        <p className="mt-4">El inmueble ha sido marcado como reservado.</p>
-      </div>
-    );
-  } catch (error) {
-    console.error(error);
-    return <p>Error al confirmar la reserva.</p>;
-  }
+      <div className="flex flex-col items-center justify-center h-screen bg-gray-100">
+      <h1 className="text-4xl font-bold text-green-400 mb-4">¡Felicitaciones!</h1>
+      <p className="text-lg text-gray-700 mb-6">
+       Reserva del inmueble {inmueble.titulo} confirmada con exito!!!
+      </p>
+      <a
+        href="http://localhost:3000"
+        className="bg-blue-600 text-white px-6 py-3 rounded hover:bg-blue-700 transition-colors"
+      >
+        Seguir navegando
+      </a>
+    </div>
+    )
 }

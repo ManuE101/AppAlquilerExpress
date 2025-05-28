@@ -62,5 +62,13 @@ export class ReservaRepository{
         await reserva.save();
         return { ok: true, id_Reserva: id_reserva};
     }
+    static async puedeReservar({ id_inmueble, fecha_inicio, fecha_fin }) {
+  const reservas = await Reserva.find({ inmueble_id: id_inmueble });
+  if (checkSobrepone(fecha_inicio, fecha_fin, reservas)) {
+    return { ok: false, error: 'La reserva se superpone con otra existente' };
+  }
+  return { ok: true };
+}
+
     
 }

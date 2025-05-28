@@ -1,12 +1,12 @@
 "use client";
 
-import { hacerReserva } from "../utils/inmuebles_fetch";
+import { getInmuebleById, hacerReserva } from "../utils/inmuebles_fetch";
 
 export default function ReservaButton({ id_inmueble }) {
   async function handleClick() {
     try {
       console.log("Haciendo reserva para el inmueble con ID:", id_inmueble);
-      const reserva = await hacerReserva(id_inmueble);
+      const reserva = await getInmuebleById(id_inmueble);
 
       if (reserva?.error) {
         console.error("Error al registrar la reserva:", reserva.error);

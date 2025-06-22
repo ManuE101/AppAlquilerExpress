@@ -1,13 +1,25 @@
 import Link from "next/link";
+import { cookies } from "next/headers";
+import { getUser } from "../../../../utils/user_fetchs";
+import UserProfile from "../../../../components/components-profile/UserProfile";
+import AdminProfile from "../../../../components/components-profile/AdminProfile";
+import EmpleadoProfile from "../../../../components/components-profile/EmpleadoProfile";
+import { notFound } from "next/navigation";
 
-export default function Profile() {
+export default async function Profile() {
+  const cookieStore = await cookies();
+  const accessToken = await cookieStore.get("access_token")?.value;
+  const user = await getUser(accessToken);
+  console.log("User Profile Data:", user);
+if (!user) {
+    notFound();
+  }
+
   return (
-    <div className="flex flex-col items-center justify-center mt-2 h-auto text-black">
-      <h1 className="text-2xl font-bold mb-4">User Profile</h1>
-      <p className="text-lg">Welcome to your profile page!</p>
-      <p className="text-lg">Here you can manage your account settings.</p>
-      <Link className="mt-4 px-4 py-2 bg-blue-500 text-white rounded" href={"http://localhost:3000/user/reservas"}> Ver reservas</Link>
-      <Link className="mt-4 px-4 py-2 bg-blue-500 text-white rounded" href={"http://localhost:3000/user/cancelaciones"}> Ver cancelaciones</Link>
-    </div>
+    <>
+      {user.rol === "cliente" && <UserProfile user={user} />}
+      {user.rol === "admin" && <AdminProfile user={user} />}
+       {user.rol === "empleado" && <EmpleadoProfile user={user} />}
+    </>
   );
 }

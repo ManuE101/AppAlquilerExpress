@@ -41,11 +41,8 @@ router.post("/login", async (req,res) => {
 
 
 router.post("/register", async (req,res) => {
-    const {username, password,rol} = req.body
-    console.log(req.body)
-
     try {
-        const id = await UserRepository.create({username, password, rol})
+        const id = await UserRepository.create(req.body)
         res.send("usuario creado")
 
     } catch(error) {
@@ -79,7 +76,7 @@ router.get("/protected", (req, res) => {
   res.json({ loggedIn: true });
 });
 
-router.get("/get_user", (req, res) => {
+router.get("/get_user", async (req, res) => {
   console.log("Cookies recibidas:", req.cookies);
   const token = req.cookies.access_token;
   console.log(token)
@@ -88,8 +85,8 @@ router.get("/get_user", (req, res) => {
   }
   try {
     const decoded = jwt.verify(token, "boca"); // Usá tu secret real en producción
-    // decoded.username, decoded.id, etc.
-    res.json(decoded);
+    const user = await UserRepository.getUser(decoded.id);
+    res.json(user);
   } catch (err) {
     res.status(401).json({ message: "Token inválido" });
   }
@@ -105,10 +102,9 @@ router.delete("/eliminar_usuario/:id", async (req, res) => {
     if (decoded.rol !== "admin") {
       return res.status(403).json({ message: "No tienes permisos para eliminar usuarios" });
     }
-
     res.json(await UserRepository.delete(req.params.id));
   } catch (err) {
-    res.status(401).json({ message: "Token inválido" });
+    res.status(401).json({ message: err.message });
   }
 });
 
@@ -118,21 +114,14 @@ router.post("/agregar_empleado", async (req, res) => {
     return res.status(401).json({ message: "No autorizado" });
   }
   try {
-    //decodifico el token para ver mi rol
     const decoded = jwt.verify(token, "boca");
     if (decoded.rol !== "admin") {
       return res.status(403).json({ message: "No tienes permisos para agregar empleados" });
     }
-    const { username, password, nombre, apellido, correo, dni, telefono } = req.body;
+    // sobreescribir el rol por seguridad ( ya checkee admin pero bueno)
     const result = await UserRepository.create({
-      username,
-      password,
-      rol: "empleado",
-      nombre,
-      apellido,
-      correo,
-      dni,
-      telefono
+      ...req.body,
+      rol: "empleado" 
     });
     res.json("Empleado agregado correctamente");
   } catch (err) {

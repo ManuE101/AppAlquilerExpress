@@ -16,39 +16,42 @@ const User = Schema('User', {
     apellido: { type: String },
     correo: { type: String },
     dni: { type: String },      // Usar string para evitar problemas con ceros a la izquierda
-    telefono: { type: String }
+    telefono: { type: String },
+    nacimiento: {type: String}
 });
 
 export class UserRepository{
-    static async create({ username, password, rol, nombre, apellido, correo, dni, telefono }) {
-        //1- validaciones
-        //utilizar zod
-        const parsed = userCreateSchema.safeParse({username, password})
-        if (!parsed.success) {
-            throw new Error(JSON.stringify(parsed.error.format()))
-        }
+  static async create(data) {
+    // 1- Validaciones
+    const parsed = userCreateSchema.safeParse(data);
+    if (!parsed.success) {
+        console.log('Error de validación:', parsed.error.format());
+        throw new Error(JSON.stringify(parsed.error.format()));
+    }
 
-        // 2- ASEGURARSE QUE EL USERNAME Y DNI NO EXISTEN
-        const user = await User.findOne({username})
-        if(user) throw  new Error('Username ya existente')
-        const userDni = await User.findOne({dni})
-        if(userDni) throw new Error('DNI ya existente')
+    // 2- Asegurarse que el username y DNI no existen
+    const user = await User.findOne({ username: data.username });
+    if (user) throw new Error('Username ya existente');
+    const userDni = await User.findOne({ dni: data.dni });
+    if (userDni) throw new Error('DNI ya existente');
+
+    // 3- Codifico la contraseña
+    const idX = crypto.randomUUID();
+    const hashPassword = await bcrypt.hash(data.password, 10);
     
-        // 3- Codifico la contraseña
-        const idX = crypto.randomUUID();
-        const hashPassword = await bcrypt.hash(password,10)
-        // 4- Creo el usuario
-        User.create({
-              _id: idX,
-        username,
-        password: hashPassword,
-        rol,
-        nombre,
-        apellido,
-        correo,
-        dni,
-        telefono
-        }).save()
+    // 4- Creo el usuario (descompón el objeto y sobreescribe password)
+    User.create({
+        _id: idX,
+        ...data,
+        password: hashPassword // Sobrescribe el password plano por el hasheado
+    }).save();
+}
+
+    static async getUser(id) {
+        const user = await User.findOne({_id: id})
+        if(!user) throw new Error('No existe tal usuario')
+        const {password: _, ...publicUser} = user //saco la contraseña
+        return publicUser
     }
 
     static async login({username , password}) {
@@ -65,10 +68,7 @@ export class UserRepository{
     }
 
     static async delete(id){
-        const deleted = await User.deleteOne({_id: id})
-        if(!deleted) {
-         throw new Error('No se pudo eliminar el usuario')
-        }
+        await User.remove({_id: id})
         return {ok:true, message: 'Usuario eliminado correctamente'}    
     }
 
@@ -77,7 +77,7 @@ export class UserRepository{
         if (!user) {
             throw new Error('No existe un usuario con ese DNI');
         }   
-        await User.deleteOne({_id: user._id});
+        await User.remove({_id: user._id});
         return { ok: true, message: 'Usuario eliminado correctamente' };
     }
 

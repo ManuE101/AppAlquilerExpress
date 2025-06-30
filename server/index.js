@@ -4,6 +4,7 @@ import inmuebleRoutes from "./routes/inmueble-routes.js";
 import reservasRoutes from "./routes/reservas_routes.js";
 import cookieParser from "cookie-parser"
 import cors from "cors";
+import comentarioRoutes from "./routes/comentarios.js";
 
 const app = express();
 
@@ -44,4 +45,6 @@ app.listen(PORT , () => {
 app.use((req,res) => {
     res.status(404).send('<h1> Boca </h1>')
 })
+
+app.use("/comentario", comentarioRoutes);
 

@@ -14,6 +14,7 @@ export async function registerFetch(data) {
 }
 
 
+
 export async function loginFetch(username,password) {
     const res = await fetch('http://localhost:8080/user/login', {
         method: 'POST',

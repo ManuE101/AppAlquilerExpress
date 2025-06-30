@@ -1,6 +1,5 @@
 import RegisterForm from "../../../../components/RegisterForm";
 
-
 export default function RegisterPage() {
   return (
     <div className="p-4 text-black flex flex-col w-full justify-center items-center">

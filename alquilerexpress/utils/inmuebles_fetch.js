@@ -66,16 +66,23 @@ export async function getInmuebleById(id) {
 }
 
 
-export async function hacerReserva(id_inmueble) {
+export async function hacerReserva(id_inmueble,token) {
     try {
         const res = await fetch("http://localhost:8080/reserva/make_reserva", {
             method: "POST",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`, // 👈 lo agregás acá
             },
             credentials: "include",
             body: JSON.stringify({id_inmueble , fecha_inicio: "2023-11-01", fecha_fin: "2023-11-05"})
         });
+             if (!res.ok) {
+            // No es 2xx, obtenemos texto para debug
+            const text = await res.text();
+            console.error("Error en respuesta del backend:", res.status, text);
+            throw new Error(`Error en respuesta del backend: ${res.status}`);
+        }
         const data = await res.json();
         return data
     } catch (error) {
@@ -116,4 +123,23 @@ export async function getReservasCanceladas(id_Cliente) {
     } catch (error) {
         console.error("Error al filtrar reservas:", error);
     }
+}
+
+export async function checkReserva(productoId, fecha_inicio, fecha_fin) {
+  try {
+    const res = await fetch(
+      `http://localhost:8080/reserva/check?id_inmueble=${productoId}&fecha_inicio=${fecha_inicio}&fecha_fin=${fecha_fin}`
+    );
+
+    if (!res.ok) {
+      const errorData = await res.json();
+      throw new Error(errorData.error || "Error al consultar reserva");
+    }
+
+    const data = await res.json(); // { ok: true } o { ok: false, error: "...mensaje..." }
+    return data;
+  } catch (error) {
+    console.error("Error en checkReserva:", error);
+    throw error;
+  }
 }

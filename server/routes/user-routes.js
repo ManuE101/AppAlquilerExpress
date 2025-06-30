@@ -94,6 +94,14 @@ router.get("/get_user", (req, res) => {
   }
 });
 
+// Obtener usuario actual desde la sesión
+router.get("/me", (req, res) => {
+  if (!req.session?.user) {
+    return res.status(401).send("No autenticado");
+  }
+
+  res.json({ username: req.session.user.username });
+});
 
 
 

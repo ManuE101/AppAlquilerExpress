@@ -32,6 +32,8 @@ export default function EmpleadoForm() {
       alert("Empleado registrado con exito!");
       event.target.reset();
     } catch (err) {
+      alert("Error al registrar el empleado: " + err.message);
+      event.target.reset();
       setFieldErrors(parseZodErrors(err.message));
     }
   }

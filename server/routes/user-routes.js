@@ -102,19 +102,20 @@ router.delete("/eliminar_usuario/:id", async (req, res) => {
     if (decoded.rol !== "admin") {
       return res.status(403).json({ message: "No tienes permisos para eliminar usuarios" });
     }
-    res.json(await UserRepository.delete(req.params.id));
-  } catch (err) {
-    res.status(401).json({ message: err.message });
-  }
+      res.json(await UserRepository.delete(req.params.id));
+    } catch (err) {
+      res.status(401).json({ message: err.message });
+    }
+  });
 
-router.get("/me", (req, res) => {
+/*router.get("/me", (req, res) => {
   if (!req.session?.user) {
     return res.status(401).send("No autenticado");
   }
 
   res.json({ username: req.session.user.username });
 
-});
+});*/
 
 router.post("/agregar_empleado", async (req, res) => {
   const token = req.cookies.access_token;

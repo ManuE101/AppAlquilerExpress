@@ -42,3 +42,21 @@ export async function eliminarEmpleado(id) {
     return await res.json();
   }
 } 
+
+export async function editarEmpleado(id,form) {
+  const res = await fetch(`http://localhost:8080/user/editar_usuario/${id}`, {
+    method: "PUT",
+    credentials: "include",
+    body: JSON.stringify(form),
+    headers: { 
+      "Content-Type": "application/json" 
+    },
+  });
+  if (!res.ok) {
+    const msg = await res.text();
+    console.error("eliminarEmpleado error:", msg);
+    return null; // Devuelve null para que funcione notFound()
+  } else {
+    return await res.json();
+  }
+} 

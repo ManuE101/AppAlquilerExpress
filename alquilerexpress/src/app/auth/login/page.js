@@ -17,7 +17,10 @@ export default function LoginPage() {
       const password = formData.get("password");
   
       try {
-        await loginFetch(username, password);
+        const resp = await loginFetch(username, password);
+        if(resp.requires2FA){
+          router.push(`/verify?username=${encodeURIComponent(username)}`);
+        }
         alert("Good to go");
         event.target.reset();
         window.location.href = "/"; 

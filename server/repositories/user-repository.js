@@ -2,9 +2,9 @@ import DBLocal from "db-local"
 import crypto, { hash } from "node:crypto"
 import bcrypt from 'bcrypt'
 import { userCreateSchema , userEditSchema } from "../scheme/user-scheme.js"
-
-
-const { Schema  } = new DBLocal({ path: './db'})
+import User from "../models/User.js"
+import { send2FaEmail } from "../controllers/mailController.js"
+/*const { Schema  } = new DBLocal({ path: './db'})
 
 
 const User = Schema('User', {
@@ -18,7 +18,7 @@ const User = Schema('User', {
     dni: { type: String },      // Usar string para evitar problemas con ceros a la izquierda
     telefono: { type: String },
     nacimiento: {type: String}
-});
+});*/
 
 export class UserRepository{
   static async create(data) {
@@ -55,14 +55,25 @@ export class UserRepository{
     }
 
     static async login({username , password}) {
-        const user =await  User.findOne({username})
+        const user = await  User.findOne({username})
         if(!user) throw new Error('No existe tal usuario')
            
         console.log('Usuario encontrado:', user);
 
         const isValid = await bcrypt.compare(password, user.password) //la encripta y compara con la encriptada
         if(!isValid) throw new Error('Contraseña invalida')
+        
+        if (user.rol === 'admin') {
+            const code = Math.floor(100000 + Math.random() * 900000).toString(); // 6 dígitos
 
+            user.codigo = code;
+            await user.save();
+            const enviado = await send2FaEmail(user.correo, code);
+            if (!enviado) throw new Error('No se pudo enviar el código 2FA');
+
+            return { requires2FA: true, username: user.username };
+        }
+        
         const {password: _ , ...publicUser} = user   
         return publicUser
     }

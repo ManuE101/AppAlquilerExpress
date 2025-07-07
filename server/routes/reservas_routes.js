@@ -169,6 +169,56 @@ router.post("/reservas_usuario_canceladas", async (req, res) => {
     }
 })
 
+router.post("/entre-fechas", async (req, res) => {
+    const {fechaInicio, fechaFin} = req.body;
+    if (!fechaInicio || !fechaFin) {
+        return res.status(400).json({ error: "Faltan fechas" });
+    }
+    try{
+        const reservas = await ReservaRepository.getReservasEntre(fechaInicio, fechaFin);
+        res.json(reservas);
+    } catch (error){
+        console.error("Error al obtener reservas entre fechas:", error);
+        res.status(500).json({ error: "Error interno del servidor" });
+    }
+})
+
+router.post("/clientes-entre-fechas", async (req, res) => {
+  const { fechaInicio, fechaFin } = req.body;
+  try {
+    const idsClientes = await ReservaRepository.getClientesQueReservaronEntre(fechaInicio, fechaFin);
+    console.log(idsClientes);
+    const clientes = await Promise.all(
+      idsClientes.map(async (id) => {
+        const user = await UserRepository.getUser(id);
+        return {
+          id: user._id,
+          nombre: user.nombre,
+          dni: user.dni,
+          apellido: user.apellido,
+          email: user.correo
+        };
+      })
+    );
+
+    res.json(clientes);
+  } catch (error) {
+    console.error("Error al obtener clientes entre fechas:", error);
+    res.status(500).json({ error: "Error interno del servidor" });
+  }
+})
+
+router.post("/monto-entre-fechas", async (req, res) => {
+  const { fechaInicio, fechaFin } = req.body;
+  try{
+    const total = await ReservaRepository.getPrecioInmueblesEntre(fechaInicio, fechaFin);
+    res.json({ total });
+  } catch (error) {
+    console.error("Error al calcular dinero:", error);
+    res.status(500).json({ error: "Error interno del servidor" });
+  }
+})
+
 router.post("/make_presencial", async (req, res) => {
   const token = req.cookies.access_token || req.headers.authorization?.split(" ")[1];
   if (!token) return res.status(401).json({ error: "Usuario no autenticado" });

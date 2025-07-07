@@ -1,6 +1,7 @@
 import DBLocal from "db-local"
 import dayjs from 'dayjs'
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore.js';
+import { InmuebleRepository } from "./inmueble-repository.js";
 dayjs.extend(isSameOrBefore);
 import User from "../models/UserModel.js";
 import Reserva from "../models/ReservaModel.js";
@@ -81,7 +82,6 @@ console.log("DNI recibido para búsqueda:", dni);
       return { ok: false, error: 'La reserva se superpone con otra existente' };
     }
 
-
     const idX = crypto.randomUUID();
     await Reserva.create({
         _id: idX,
@@ -104,5 +104,40 @@ console.log("DNI recibido para búsqueda:", dni);
       },
       monto,
     };
+    }
+
+    static async getReservasEntre(fecha_inicio, fecha_fin){
+        const reservas = await Reserva.find();
+        return reservas.filter((reserva) =>
+        sobrepone(fecha_inicio, fecha_fin, reserva.fecha_inicio, reserva.fecha_fin)
+        );
+    }
+
+    static async getClientesQueReservaronEntre(fecha_inicio, fecha_fin){
+        const reservas = await this.getReservasEntre(fecha_inicio, fecha_fin);
+        const idsClientes = [...new Set(reservas.map(r => r.user_id))];
+        return idsClientes;
+    }
+
+    static async getPrecioInmueblesEntre(fecha_inicio, fecha_fin){
+        const reservas = await Reserva.find();
+        const reservas_filtro = reservas.filter((reserva) =>
+        reserva.estado === "activa" &&
+        sobrepone(fecha_inicio, fecha_fin, reserva.fecha_inicio, reserva.fecha_fin)
+        );
+        let total = 0;
+        for(const reserva of reservas_filtro){
+            try{
+                const inmueble = await InmuebleRepository.getById(reserva.inmueble_id);
+                const inicio = dayjs(reserva.fecha_inicio);
+                const fin = dayjs(reserva.fecha_fin);
+                const dias = fin.diff(inicio, "day") + 1;
+
+                total += dias * inmueble.precio;
+            } catch (err){
+                throw new Error("Inmueble no encontrado");
+            }
+        } 
+        return total;
     }
 }

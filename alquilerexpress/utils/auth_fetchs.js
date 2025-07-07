@@ -28,6 +28,9 @@ export async function loginFetch(username,password) {
         const msg = await res.text()
         throw new Error(msg)
       }
+
+      const data = await res.json();
+      return data;
 }
 
 export async function logOutFetch() {
@@ -52,4 +55,16 @@ export async function empleadoRegisterFetch(data) {
   }
 
   return await res.json().catch(() => null); // si no hay json devuelve null
+}
+
+export async function handle2FA(username, code) {
+  const res = await fetch('http://localhost:8080/user/verify2FA', {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ username, code }),
+  })
+  if (!res.ok){
+    const msg = await res.text();
+    throw new Error(msg);
+  }
 }

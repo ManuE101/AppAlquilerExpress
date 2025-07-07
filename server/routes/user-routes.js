@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken'
 
 import express from "express"
-
+import User from '../models/User.js';
 
 const router = express.Router();
 import { UserRepository }  from "../repositories/user-repository.js";
@@ -18,6 +18,9 @@ router.post("/login", async (req,res) => {
     console.log(req.body)
     try {
         const user = await UserRepository.login({username,password})
+        if(user.requires2FA){
+          return res.json({requires2FA: true, username: user.username});
+        }
         const token = jwt.sign(
         {username: user.username,
           id: user._id,
@@ -102,11 +105,13 @@ router.delete("/eliminar_usuario/:id", async (req, res) => {
     if (decoded.rol !== "admin") {
       return res.status(403).json({ message: "No tienes permisos para eliminar usuarios" });
     }
+
     res.json(await UserRepository.delete(req.params.id));
   } catch (err) {
     res.status(401).json({ message: err.message });
   }
 });
+
 
 
 router.post("/agregar_empleado", async (req, res) => {
@@ -173,6 +178,7 @@ router.put("/editar_usuario/:id", async (req, res) => {
   }
 });
 
+
 router.get("/get_byID", async (req, res) => { 
   const user = await UserRepository.getUserByDNI(req.query.id);
   if (!user) {
@@ -180,5 +186,49 @@ router.get("/get_byID", async (req, res) => {
   }
   res.json({ok:true ,user});
 });
+
+
+
+router.post("/verify2FA", async (req, res) => {
+  const { username, code } = req.body;
+
+  try {
+    const user = await User.findOne({ username });
+    if (!user || !user.codigo) {
+      return res.status(400).json({ message: "Código no solicitado" });
+    }
+
+    if (user.codigo !== code) {
+      return res.status(401).json({ message: "Código incorrecto" });
+    }
+
+    user.codigo = null;
+    await user.save();
+
+    const token = jwt.sign(
+      {
+        username: user.username,
+        id: user._id,
+        rol: user.rol
+      },
+      "boca",
+      { expiresIn: '8h' }
+    );
+
+    const { password: _, ...publicUser } = user;
+
+    res
+      .cookie("access_token", token, {
+        httpOnly: true,
+        maxAge: 1000 * 60 * 60,
+        sameSite: "lax",
+        path: "/",
+      })
+      .json({ user: publicUser, token });
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+});
+
 
 export default router;

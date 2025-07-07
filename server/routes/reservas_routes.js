@@ -2,6 +2,9 @@ import express from "express";
 import jwt from "jsonwebtoken";
 import { ReservaRepository } from "../repositories/reservas_repository.js";
 
+import { UserRepository } from "../repositories/user-repository.js";
+import { sendReservaEmail } from "../controllers/mailController.js";
+
 //import { use } from "react";
 
 const router = express.Router();
@@ -84,6 +87,24 @@ router.post("/make_reserva", async (req, res) => {
         return res.status(400).json({error: aux.error});
         }
         console.log(aux)
+        res.send({id_reserva: aux.id_Reserva});
+    } catch (error){
+        console.error("Error al crear la reserva:", error);
+        res.status(400).send(error.message);
+    }
+    const user = UserRepository.getUser(user_id);
+    try{
+        const aux1 = await sendReservaEmail(user.email, {
+        nombre_usuario: user.nombre,
+        id_reserva: aux.id_Reserva,
+        id_inmueble,
+        fecha_inicio,
+        fecha_fin
+        });
+        if(!aux1.ok){
+            console.log(aux.error);
+            return res.status(400).json({error: aux.error});
+        }
         res.send({id_reserva: aux.id_Reserva});
     } catch (error){
         console.error("Error al crear la reserva:", error);

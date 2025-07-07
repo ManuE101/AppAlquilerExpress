@@ -53,7 +53,8 @@ export default function ListarEmpleados() {
         ) : empleados && empleados.length > 0 ? (
        
             empleados.map((empleado) => (
-               <CardEmpleado empleado={empleado} key={empleado._id} onEliminado = {handleEmpleadoEliminado} onEditar = {handleEditar}/>
+               <CardEmpleado empleado={empleado} key={empleado._id} onEliminado = {handleEmpleadoEliminado} 
+               handleSuccessEdicion={handleSuccessEdicion} onEditar = {handleEditar}/>
             ))
         ) : (
           <p>No hay empleados registrados.</p>

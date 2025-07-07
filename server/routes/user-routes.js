@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken'
 
 import express from "express"
-import User from '../models/User.js';
+import User from '../models/UserModel.js';
 
 const router = express.Router();
 import { UserRepository }  from "../repositories/user-repository.js";

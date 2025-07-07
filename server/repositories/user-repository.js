@@ -4,8 +4,7 @@ import bcrypt from 'bcrypt'
 import { userCreateSchema , userEditSchema } from "../scheme/user-scheme.js"
 import User from "../models/UserModel.js"
 import { send2FaEmail } from "../controllers/mailController.js"
-/*const { Schema  } = new DBLocal({ path: './db'})
-*/
+
 
 export class UserRepository{
   static async create(data) {
@@ -58,6 +57,7 @@ export class UserRepository{
         const isValid = await bcrypt.compare(password, user.password) //la encripta y compara con la encriptada
         if(!isValid) throw new Error('Contraseña invalida')
         
+            /*
         if (user.rol === 'admin') {
             const code = Math.floor(100000 + Math.random() * 900000).toString(); // 6 dígitos
 
@@ -68,7 +68,7 @@ export class UserRepository{
 
             return { requires2FA: true, username: user.username };
         }
-        
+         */
         const {password: _ , ...publicUser} = user   
         return publicUser
     }

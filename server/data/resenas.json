@@ -1,0 +1,19 @@
+[
+  [],
+  [
+    {
+      "id": 1751895609843,
+      "user": "yo1",
+      "texto": "5 estrellas! unos genios!",
+      "estrellas": 5,
+      "fecha": "2025-07-07T13:40:09.843Z"
+    },
+    {
+      "id": 1751895943047,
+      "user": "Prueba",
+      "texto": "Tenia olor a pata.",
+      "estrellas": 2,
+      "fecha": "2025-07-07T13:45:43.047Z"
+    }
+  ]
+]

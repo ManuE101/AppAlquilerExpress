@@ -5,7 +5,7 @@ import { getUser } from "../../../../utils/user_fetchs";
 import ReservaButton from "../../../../components/ReservaButton";
 import InmuebleMap from "../../../../components/InmuebleMap";
 import CommentSection from "../../../../components/commentSeccion";
-import ReseñaSection from "../../../../components/ReseñaSection";
+import ResenaSection from "../../../../components/ResenaSection";
 import { cookies } from "next/headers";
 
 export default async function Page({ params }) {
@@ -14,7 +14,6 @@ export default async function Page({ params }) {
   const cookieStore = await cookies();
   const accessToken = await cookieStore.get("access_token")?.value;
   const user = await getUser(accessToken);
-  
 
   return (
     <div className="flex flex-col md:flex-row w-full max-w-6xl mx-auto p-4 gap-6 bg-white text-black rounded shadow">
@@ -34,9 +33,13 @@ export default async function Page({ params }) {
               <p className="font-bold">Descripción:</p>
               <p className="text-neutral-600">{inmueble.descripcion}</p>
             </div>
-            <span className={inmueble.disponible
-              ? "py-1.5 px-2 text-green-700 w-max text-xs bg-green-300 font-semibold rounded"
-              : "py-1.5 px-2 w-max text-xs text-red-700 bg-red-300 font-semibold rounded"}>
+            <span
+              className={
+                inmueble.disponible
+                  ? "py-1.5 px-2 text-green-700 w-max text-xs bg-green-300 font-semibold rounded"
+                  : "py-1.5 px-2 w-max text-xs text-red-700 bg-red-300 font-semibold rounded"
+              }
+            >
               {inmueble.disponible ? "Disponible" : "En Refacción"}
             </span>
             <div className="mt-4">
@@ -51,8 +54,8 @@ export default async function Page({ params }) {
             </div>
           </div>
         </div>
-      <CommentSection inmuebleId={id} />
-      <ReseñaSection inmuebleId={id} />
+        <ResenaSection inmuebleId={id} />
+        <CommentSection inmuebleId={id} />
       </div>
     </div>
   );

@@ -26,18 +26,13 @@
 //         const data = jwt.verify(token , "boca") // boca tiene que ser .env
 //         req.session.user = data
 //     } catch{}
-    
 
 //     next() // esto sigue a la siguiente ruta o middleware, es como un "ya termine"
 // })
 
-
-
-
 // app.use("/user", userRoutes);        // Tus endpoints de usuario estarán bajo /user
 // app.use("/inmueble", inmuebleRoutes); // Tus endpoints de inmueble bajo /inmueble
 // app.use("/reserva", reservasRoutes);
-
 
 // app.listen(PORT , () => {
 //     console.log(`Server started on  ${PORT}`);
@@ -53,7 +48,7 @@ import userRoutes from "./routes/user-routes.js";
 import inmuebleRoutes from "./routes/inmueble-routes.js";
 import reservasRoutes from "./routes/reservas_routes.js";
 import comentarioRoutes from "./routes/comentarios-route.js";
-import reseñaRoutes from "./routes/reseñas-route.js";
+import resenaRoutes from "./routes/resenas-route.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import jwt from "jsonwebtoken";
@@ -62,12 +57,14 @@ const app = express();
 const PORT = process.env.PORT ?? 8080;
 
 // Middleware CORS y parsers
-app.use(cors({
-  origin: "http://localhost:3000", // frontend
-  credentials: true
-}));
-app.use(express.json());           // Body en JSON
-app.use(cookieParser());           // Cookies
+app.use(
+  cors({
+    origin: "http://localhost:3000", // frontend
+    credentials: true,
+  })
+);
+app.use(express.json()); // Body en JSON
+app.use(cookieParser()); // Cookies
 
 // Middleware de autenticación JWT
 app.use((req, res, next) => {
@@ -84,19 +81,18 @@ app.use((req, res, next) => {
 });
 
 // Registro de rutas
-app.use("/user", userRoutes);           // Rutas de usuario
-app.use("/inmueble", inmuebleRoutes);   // Rutas de inmuebles
-app.use("/reserva", reservasRoutes);    // Rutas de reservas
+app.use("/user", userRoutes); // Rutas de usuario
+app.use("/inmueble", inmuebleRoutes); // Rutas de inmuebles
+app.use("/reserva", reservasRoutes); // Rutas de reservas
 app.use("/comentario", comentarioRoutes); // Rutas de comentarios
-app.use("/reseña", reseñaRoutes);       // Rutas de reseñas
+app.use("/resena", resenaRoutes); // Rutas de reseñas
 
 // Inicio del servidor
 app.listen(PORT, () => {
   console.log(`Server started on port ${PORT}`);
 });
 
-
 // Middleware 404 (debe ir al final)
 app.use((req, res) => {
-  res.status(404).send('<h1> Boca </h1>');
+  res.status(404).send("<h1> Boca </h1>");
 });

@@ -5,6 +5,7 @@ import { getUser } from "../../../../utils/user_fetchs";
 import ReservaButton from "../../../../components/ReservaButton";
 import InmuebleMap from "../../../../components/InmuebleMap";
 import CommentSection from "../../../../components/commentSeccion";
+import ReseñaSection from "../../../../components/ReseñaSection";
 import { cookies } from "next/headers";
 
 export default async function Page({ params }) {
@@ -51,6 +52,7 @@ export default async function Page({ params }) {
           </div>
         </div>
       <CommentSection inmuebleId={id} />
+      <ReseñaSection inmuebleId={id} />
       </div>
     </div>
   );

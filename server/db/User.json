@@ -1,1 +1,53 @@
-[{"_id":"5402d63c-b1fb-496e-90e1-f3890dd7f7ca","username":"12341234","password":"$2b$10$PyiJ8Xr9iZGSBYK2T6q3V.hiPpGgF5CPYyAUpeu9XP0Cin0CWx2cq","rol":"cliente","nombre":"Gladys Patricia","apellido":"Noya","correo":"321@312.com","dni":"222222222222","telefono":"222222222222222","nacimiento":"2003-07-08"},{"_id":"71c9f5f5-4b70-4f68-98e4-dfd7b7a2def1","username":"1234","password":"$2b$10$h97xO4qZlNwaqCDFIvcKBuXBrRbJqt9Y8kW5jcsOjib10hZjZQOFO","rol":"empleado","nombre":"Alejo","apellido":"Noya","correo":"123123@gmail.com","dni":"333333333","telefono":"333333333333"},{"_id":"3e2506b5-33d6-41d8-b8b3-d6d46baad279","username":"Alejo","password":"$2b$10$BMo6ujTsNeDEFAcv.tzcQ.L4XizOIsan3BR/HiSA1alZzH0M1Knt6","rol":"empleado","nombre":"Alejo","apellido":"alejo","correo":"123123@gmail.com","dni":"123123123","telefono":"1231231234"},{"_id":"d7a26976-fbe4-4754-88e9-74307a56a6b8","username":"123","password":"$2b$10$YbKdlCFZ2A6HD3hsk5RJTuPJDjKSU4ByJWAFuAN32Ad7EKa6ymBm2","rol":"admin","nombre":"123","apellido":"123","correo":"123@123.com","dni":"123456","telefono":"123456","nacimiento":"1999-03-12"}]
+[
+  {
+    "_id": "a70cd7d6-5522-46bf-9fd7-a7df17bd2331",
+    "username": "yo1",
+    "password": "$2b$10$XXcoRAeUK0g9IBGBgo15cOwr8MDjPfggpruDLM7ZUpBMwEQb5zFpa",
+    "rol": "admin",
+    "nombre": "yo",
+    "apellido": "yo",
+    "correo": "yoyo@hotmail.com",
+    "dni": "91888777",
+    "telefono": "2241561284",
+    "nacimiento": "2000-12-12",
+    "codigo": "654962"
+  },
+  {
+    "_id": "72be00bc-60d2-40e8-ae7d-5d21cfd0e93c",
+    "username": "Prueba 2",
+    "password": "$2b$10$gTJby1/MDvYtJiuEqhFgL.y2wDU3mpbCm6ChNAoZF1pPTyiAiO48O",
+    "rol": "cliente",
+    "nombre": "prueba2",
+    "apellido": "dos",
+    "correo": "anashi@gmail.com",
+    "dni": "98765432",
+    "telefono": "98989898",
+    "nacimiento": "2000-12-12"
+  },
+  {
+    "_id": "9bd27813-50ce-4fbe-9867-77a45634df45",
+    "username": "Prueba",
+    "password": "$2b$10$0YFYI/fmjmDQSKRE3QxiT.dh3oByEZWX0WWX0NY5pzXy/lK2oCjga",
+    "rol": "cliente",
+    "nombre": "usuario",
+    "apellido": "prueba",
+    "correo": "hola123@123.com",
+    "dni": "12312316",
+    "telefono": "12312312",
+    "nacimiento": "2000-12-12"
+  },
+  {
+    "_id": "d7a26976-fbe4-4754-88e9-74307a56a6b8",
+    "username": "123",
+    "password": "$2b$10$YbKdlCFZ2A6HD3hsk5RJTuPJDjKSU4ByJWAFuAN32Ad7EKa6ymBm2",
+    "rol": "admin",
+    "nombre": "123",
+    "apellido": "123",
+    "correo": "123@123.com",
+    "dni": "123456",
+    "telefono": "123456",
+    "nacimiento": "1999-03-12",
+    "codigo": "621338"
+  }
+]
+

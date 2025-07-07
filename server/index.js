@@ -53,6 +53,7 @@ import userRoutes from "./routes/user-routes.js";
 import inmuebleRoutes from "./routes/inmueble-routes.js";
 import reservasRoutes from "./routes/reservas_routes.js";
 import comentarioRoutes from "./routes/comentarios-route.js";
+import reseñaRoutes from "./routes/reseñas-route.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import jwt from "jsonwebtoken";
@@ -87,6 +88,7 @@ app.use("/user", userRoutes);           // Rutas de usuario
 app.use("/inmueble", inmuebleRoutes);   // Rutas de inmuebles
 app.use("/reserva", reservasRoutes);    // Rutas de reservas
 app.use("/comentario", comentarioRoutes); // Rutas de comentarios
+app.use("/reseña", reseñaRoutes);       // Rutas de reseñas
 
 // Inicio del servidor
 app.listen(PORT, () => {

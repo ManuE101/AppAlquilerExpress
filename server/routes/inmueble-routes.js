@@ -1,6 +1,7 @@
 import express from "express";
 import { InmuebleRepository } from "../repositories/inmueble-repository.js";
 import jwt from "jsonwebtoken";
+import { ReservaRepository } from "../repositories/reservas_repository.js";
 
 const router = express.Router();
 
@@ -48,12 +49,21 @@ router.delete("/delete_inmueble/:id", async (req, res) => {
   }
   try {
     const decoded = jwt.verify(token, "boca");
+    console.log("TOKEN DECODED:", decoded);
     if (decoded.rol !== "admin") {
       return res.status(403).json({ message: "No tienes permisos para eliminar inmuebles" });
+    }
+    try{
+    const existe = await ReservaRepository.hayReservaId(id);
+    if(existe){
+        return res.status(400).json({ message: "El inmueble tiene reservas asociadas y no puede eliminarse." });
     }
     const result = await InmuebleRepository.delete(id);
     if(result.ok) {
         return res.json(result);
+    }   
+    } catch (err){
+        return res.status(401).json({ message: err.message });
     }
   }
   catch (err) {

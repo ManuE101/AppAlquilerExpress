@@ -1,10 +1,12 @@
 import express from "express";
 import jwt from "jsonwebtoken";
 import { ReservaRepository } from "../repositories/reservas_repository.js";
-
+import fetch from "node-fetch"; // o usa tu propia utilidad HTTP
 import { UserRepository } from "../repositories/user-repository.js";
 import { sendReservaEmail } from "../controllers/mailController.js";
 
+
+const ACCESS_TOKEN_MP = "APP_USR-412533297282542-052017-1f02203b19d8de48fdd23d1f95c44ff1-2448200083"
 //import { use } from "react";
 
 const router = express.Router();
@@ -200,5 +202,63 @@ router.post("/make_presencial", async (req, res) => {
     res.status(500).json({ error: "Error interno al crear reserva presencial" });
   }
 });
+
+
+
+router.get("/confirmar", async (req, res) => {
+  const { payment_id, token } = req.query;
+
+  if (!token) return res.status(401).json({ error: "Token requerido" });
+  if (!payment_id) return res.status(400).json({ error: "payment_id requerido" });
+
+  let decoded;
+  try {
+    decoded = jwt.verify(token, "boca");
+  } catch (err) {
+    return res.status(401).json({ error: "Token inválido" });
+  }
+
+  const user_id = decoded.id;
+
+  try {
+    // Consultar Mercado Pago por el pago
+    const mpRes = await fetch(`https://api.mercadopago.com/v1/payments/${payment_id}`, {
+      headers: {
+        Authorization: `Bearer ${ACCESS_TOKEN_MP}`,
+      },
+    });
+    if (!mpRes.ok) {
+      return res.status(502).json({ error: "Error al consultar Mercado Pago" });
+    }
+
+    const mpData = await mpRes.json();
+
+    // Extraer datos del metadata
+    const { productoId, fecha_inicio, fecha_fin } = mpData.metadata || {};
+
+    if (!productoId || !fecha_inicio || !fecha_fin) {
+      return res.status(400).json({ error: "Faltan datos en metadata del pago" });
+    }
+
+    // Crear la reserva en la base de datos
+    const aux = await ReservaRepository.create({
+      id_inmueble: productoId,
+      user_id,
+      fecha_inicio,
+      fecha_fin,
+    });
+
+    if (!aux.ok) {
+      return res.status(400).json({ error: aux.error || "No se pudo crear la reserva" });
+    }
+
+    // Retorná éxito
+    return res.json({ ok: true, id_reserva: aux.id_Reserva });
+  } catch (error) {
+    console.error("Error al confirmar reserva:", error);
+    return res.status(500).json({ error: "Error interno al confirmar reserva" });
+  }
+});
+
 
 export default router;

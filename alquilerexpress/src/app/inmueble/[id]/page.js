@@ -28,7 +28,7 @@ export default async function Page({ params }) {
           <div className=" flex flex-col w-full">
             <h1 className="text-2xl font-bold mt-4">{inmueble.domicilio}</h1>
             <h2 className="text-lg text-neutral-700 mb-2">{inmueble.titulo}</h2>
-            <h3 className="text-xl font-semibold text-green-700 mb-2">{`Por semana  $${inmueble.precio}`}</h3>
+            <h3 className="text-xl font-semibold text-green-700 mb-2">{`Precio por dia  de $${inmueble.precio}`}</h3>
             <div className="my-2">
               <p className="font-bold">Descripción:</p>
               <p className="text-neutral-600">{inmueble.descripcion}</p>

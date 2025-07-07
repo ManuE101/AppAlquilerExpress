@@ -40,11 +40,13 @@ export async function POST(req: Request) {
           },
         ],
         metadata: {
-          productoId: inmueble.id || productoId,
+        productoId: inmueble.id || productoId,
+      fecha_inicio: body.fecha_inicio, // ← agregás las fechas
+      fecha_fin: body.fecha_fin,  
         },
         back_urls: {
-          success: `https://2lt3mks5-3000.brs.devtunnels.ms/confirmation?id=${productoId}&token=${token}`,
-          failure: 'https://2lt3mks5-3000.brs.devtunnels.ms/failure',
+          success: `https://pd71ds4n-3000.brs.devtunnels.ms/confirmation?id=${productoId}&token=${token}`,
+          failure: 'https://pd71ds4n-3000.brs.devtunnels.ms/failure',
         },
         external_reference: token,
         auto_return: "approved",

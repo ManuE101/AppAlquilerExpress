@@ -48,9 +48,13 @@ router.post("/register", async (req,res) => {
         const id = await UserRepository.create(req.body)
         res.send("usuario creado")
 
-    } catch(error) {
-        res.status(400).send(error.message)
-    }
+    } catch (error) {
+  if (error.details) {
+    return res.status(400).json(error.details);
+  }
+  return res.status(400).json({ general: { _errors: [error.message] } });
+}
+
 })
 router.post("/logout", (req,res) => {
     res.clearCookie('access_token', {

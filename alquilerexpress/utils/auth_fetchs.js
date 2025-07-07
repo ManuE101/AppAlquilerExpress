@@ -7,6 +7,7 @@ export async function registerFetch(data) {
 
   if (!res.ok) {
     const msg = await res.text();
+    console.log(msg)
     throw new Error(msg);
   }
 

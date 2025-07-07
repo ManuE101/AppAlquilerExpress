@@ -1,26 +1,58 @@
-import { get } from "http";
-import { getInmuebleById, hacerReserva } from "../../../utils/inmuebles_fetch";
+"use client";
 
+import { useEffect, useState } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
 
+export default function ConfirmationPage() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
 
-export default async function ConfirmacionPage({ searchParams }) {
-  const id = searchParams?.id;
-  console.log("ID de inmueble recibido:", id);
-  const reserva = await hacerReserva(id);
-  const inmueble = await getInmuebleById(id);
- 
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(false);
+
+  useEffect(() => {
+    async function confirmar() {
+      const payment_id = searchParams.get("id");
+      const token = searchParams.get("token");
+
+      if (!payment_id || !token) {
+        setError("Faltan datos para confirmar la reserva");
+        setLoading(false);
+        return;
+      }
+
+      try {
+        const res = await fetch(`https://tu-backend/confirmar?payment_id=${payment_id}&token=${token}`, {
+  method: "GET",
+});
+
+        const data = await res.json();
+
+        if (!res.ok) {
+          setError(data.error || "Error al confirmar la reserva");
+        } else {
+          setSuccess(true);
+        }
+      } catch (e) {
+        setError("Error de red al confirmar la reserva");
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    confirmar();
+  }, [searchParams]);
+
+  if (loading) return <p>Confirmando reserva...</p>;
+  if (error) return <p>Error: {error}</p>;
+  if (success)
     return (
-      <div className="flex flex-col items-center justify-center h-screen bg-gray-100">
-      <h1 className="text-4xl font-bold text-green-400 mb-4">¡Felicitaciones!</h1>
-      <p className="text-lg text-gray-700 mb-6">
-       Reserva del inmueble {inmueble.titulo} confirmada con exito!!!
-      </p>
-      <a
-        href="http://localhost:3000"
-        className="bg-blue-600 text-white px-6 py-3 rounded hover:bg-blue-700 transition-colors"
-      >
-        Seguir navegando
-      </a>
-    </div>
-    )
+      <div>
+        <h1>Reserva confirmada con éxito</h1>
+        <p>Gracias por tu compra.</p>
+      </div>
+    );
+
+  return null;
 }

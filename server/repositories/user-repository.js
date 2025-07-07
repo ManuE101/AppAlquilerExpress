@@ -11,15 +11,19 @@ export class UserRepository{
     // 1- Validaciones
     const parsed = userCreateSchema.safeParse(data);
     if (!parsed.success) {
-        console.log('Error de validación:', parsed.error.format());
-        throw new Error(JSON.stringify(parsed.error.format()));
-    }
+  const zodFormatted = parsed.error.format();
+  const error = new Error("Zod validation failed");
+  error.details = zodFormatted;
+  throw error;
+}
+
 
     // 2- Asegurarse que el username y DNI no existen
     const user = await User.findOne({ username: data.username });
-    if (user) throw new Error('Username ya existente');
+if (user) throw Object.assign(new Error("Validación username"), { details: { username: { _errors: ["Username ya existente"] } } });
     const userDni = await User.findOne({ dni: data.dni });
-    if (userDni) throw new Error('DNI ya existente');
+    if (userDni) throw Object.assign(new Error("Validación DNI"), { details: { dni: { _errors: ["DNI ya existente"] } } });
+
 
     // 3- Codifico la contraseña
     const idX = crypto.randomUUID();

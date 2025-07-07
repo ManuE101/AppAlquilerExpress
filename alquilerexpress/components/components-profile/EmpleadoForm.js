@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { empleadoRegisterFetch } from "../../utils/auth_fetchs";
+import Link from "next/link";
 
 export default function EmpleadoForm() {
   const [fieldErrors, setFieldErrors] = useState({});
@@ -44,6 +45,10 @@ export default function EmpleadoForm() {
   }
 
   return (
+    <>
+    <div className="w-full">
+    <Link href={"/user/profile"} className="flex justify-start text-white font-medium bg-red-500 px-2 py-1 w-fit">Volver</Link>
+    </div>
     <form onSubmit={handleSubmit} className="flex flex-col gap-2 max-w-sm">
       <input type="text" name="username" placeholder="Usuario" className={inputClass("username")} required />
       {fieldErrors.username && <span className="text-red-500 text-xs">{fieldErrors.username}</span>}
@@ -69,5 +74,6 @@ export default function EmpleadoForm() {
         Registrar
       </button>
     </form>
+    </>
   );
 }

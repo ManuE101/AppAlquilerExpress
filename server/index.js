@@ -79,7 +79,6 @@ app.use((req, res, next) => {
   } catch (err) {
     // Token inválido o no presente
   }
-
   next();
 });
 
@@ -93,6 +92,7 @@ app.use("/comentario", comentarioRoutes); // Rutas de comentarios
 app.listen(PORT, () => {
   console.log(`Server started on port ${PORT}`);
 });
+
 
 // Middleware 404 (debe ir al final)
 app.use((req, res) => {

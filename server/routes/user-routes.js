@@ -231,4 +231,22 @@ router.post("/verify2FA", async (req, res) => {
 });
 
 
+router.put("/cambiar_rol/:id", async (req, res) => {
+  const token = req.cookies.access_token;
+  if (!token) {
+    return res.status(401).json({ message: "No autorizado" });
+  }
+  try {
+    const decoded = jwt.verify(token, "boca");
+    if (decoded.rol !== "admin") {
+      return res.status(403).json({ message: "No tienes permisos para cambiar roles" });
+    }
+    const result = await UserRepository.cambiarRol(req.params.id);
+    res.json(result);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+});
+
+
 export default router;

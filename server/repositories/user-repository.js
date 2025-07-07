@@ -88,11 +88,32 @@ export class UserRepository{
     }
 
     static async getEmpleados() {
-        const empleados = await User.find({rol: "empleado"});
+        const empleados = await User.find();
         if (!empleados || empleados.length === 0) {
             throw new Error('No hay empleados registrados');
         }
-        return empleados;
+        return empleados.filter(e => e.rol !== "cliente");
+    }
+
+
+
+
+    static async cambiarRol(id) {
+        const usuario = await User.findOne({ _id: id });
+        const administradores = await User.find({ rol: "admin" });
+        if (administradores.length < 2 && usuario.rol === "admin") {
+            throw new Error("No se puede eliminar el último administrador");
+        }
+        if (!usuario) throw new Error("Usuario no encontrado");
+        if (usuario.rol === "empleado") {
+            usuario.rol = "admin";
+        } else if (usuario.rol === "admin") {
+            usuario.rol = "empleado";
+        } else {
+            throw new Error("Rol no válido para cambiar");
+        }
+        await usuario.save();
+        return { ok: true, message: `Rol cambiado a ${usuario.rol} correctamente`, user: usuario };
     }
 
     static async editUser({ id, username, nombre, apellido, correo, dni, telefono }) {

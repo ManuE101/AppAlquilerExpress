@@ -1,8 +1,8 @@
 "use client";
 import { useEffect, useState } from "react";
 
-export default function ReseñaSection({ inmuebleId }) {
-  const [reseñas, setReseñas] = useState([]);
+export default function ResenaSection({ inmuebleId }) {
+  const [resenas, setResenas] = useState([]);
   const [texto, setTexto] = useState("");
   const [estrellas, setEstrellas] = useState(5);
   const [currentUser, setCurrentUser] = useState(null);
@@ -10,15 +10,17 @@ export default function ReseñaSection({ inmuebleId }) {
 
   // Obtener reseñas del inmueble
   useEffect(() => {
-    fetch(`http://localhost:8080/reseña/${inmuebleId}`, { credentials: "include" })
-      .then(res => res.json())
-      .then(setReseñas);
+    fetch(`http://localhost:8080/resena/${inmuebleId}`, {
+      credentials: "include",
+    })
+      .then((res) => res.json())
+      .then(setResenas);
   }, [inmuebleId]);
 
   // Obtener usuario actual
   useEffect(() => {
     fetch("http://localhost:8080/user/get_user", { credentials: "include" })
-      .then(res => {
+      .then((res) => {
         if (!res.ok) throw new Error();
         return res.json();
       })
@@ -29,18 +31,17 @@ export default function ReseñaSection({ inmuebleId }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
-
     try {
-      const res = await fetch(`http://localhost:8080/reseña/${inmuebleId}`, {
+      const res = await fetch(`http://localhost:8080/resena/${inmuebleId}`, {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ texto, estrellas })
+        body: JSON.stringify({ texto, estrellas }),
       });
 
       if (!res.ok) throw new Error();
       const nueva = await res.json();
-      setReseñas(prev => [...prev, nueva]);
+      setResenas((prev) => [...prev, nueva]);
       setTexto("");
       setEstrellas(5);
     } catch {
@@ -50,11 +51,11 @@ export default function ReseñaSection({ inmuebleId }) {
 
   const handleDelete = async (id) => {
     try {
-      await fetch(`http://localhost:8080/reseña/${id}`, {
+      await fetch(`http://localhost:8080/resena/${id}`, {
         method: "DELETE",
-        credentials: "include"
+        credentials: "include",
       });
-      setReseñas(prev => prev.filter(r => r.id !== id));
+      setResenas((prev) => prev.filter((r) => r.id !== id));
     } catch {
       setError("No tenés permiso para eliminar esta reseña.");
     }
@@ -63,8 +64,8 @@ export default function ReseñaSection({ inmuebleId }) {
   const puedeEliminar = (autor) =>
     currentUser &&
     (currentUser.username === autor ||
-     currentUser.rol === "admin" ||
-     currentUser.rol === "empleado");
+      currentUser.rol === "admin" ||
+      currentUser.rol === "empleado");
 
   const renderEstrellas = (cant) => {
     return "★".repeat(cant) + "☆".repeat(5 - cant);
@@ -72,7 +73,9 @@ export default function ReseñaSection({ inmuebleId }) {
 
   return (
     <div className="max-w-2xl mx-auto mt-8 p-4 bg-white rounded shadow-md">
-      <h2 className="text-2xl font-semibold mb-4 border-b border-gray-300 pb-2">Reseñas</h2>
+      <h2 className="text-2xl font-semibold mb-4 border-b border-gray-300 pb-2">
+        Reseñas
+      </h2>
 
       {error && <p className="text-red-600 mb-4 font-medium">{error}</p>}
 
@@ -80,12 +83,14 @@ export default function ReseñaSection({ inmuebleId }) {
         <form onSubmit={handleSubmit} className="mb-6 space-y-3">
           <div className="flex items-center gap-2">
             <span className="font-medium">Tu calificación:</span>
-            {[1, 2, 3, 4, 5].map(n => (
+            {[1, 2, 3, 4, 5].map((n) => (
               <button
                 key={n}
                 type="button"
                 onClick={() => setEstrellas(n)}
-                className={`text-2xl ${n <= estrellas ? "text-yellow-400" : "text-gray-300"}`}
+                className={`text-2xl ${
+                  n <= estrellas ? "text-yellow-400" : "text-gray-300"
+                }`}
               >
                 ★
               </button>
@@ -94,7 +99,7 @@ export default function ReseñaSection({ inmuebleId }) {
 
           <textarea
             value={texto}
-            onChange={e => setTexto(e.target.value)}
+            onChange={(e) => setTexto(e.target.value)}
             required
             className="w-full p-2 border rounded resize-none"
             rows={3}
@@ -109,16 +114,23 @@ export default function ReseñaSection({ inmuebleId }) {
           </button>
         </form>
       ) : (
-        <p className="mb-6 text-gray-600 italic">Iniciá sesión para dejar una reseña</p>
+        <p className="mb-6 text-gray-600 italic">
+          Iniciá sesión para dejar una reseña
+        </p>
       )}
 
       <ul className="space-y-6">
-        {reseñas.map(r => (
-          <li key={r.id} className="border border-gray-200 rounded p-4 bg-gray-50">
+        {resenas.map((r) => (
+          <li
+            key={r.id}
+            className="border border-gray-200 rounded p-4 bg-gray-50"
+          >
             <div className="flex justify-between">
               <div>
                 <strong className="text-blue-700">{r.user}</strong>
-                <div className="text-yellow-400">{renderEstrellas(r.estrellas)}</div>
+                <div className="text-yellow-400">
+                  {renderEstrellas(r.estrellas)}
+                </div>
                 <p>{r.texto}</p>
               </div>
               {puedeEliminar(r.user) && (

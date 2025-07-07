@@ -78,7 +78,7 @@ export async function editarEmpleado(id,form) {
 } 
 
 
-export default async function getUserByDNI(dni) {
+export  async function getUserByDNI(dni) {
   const res = await fetch(`http://localhost:8080/user/get_byID?id=${dni}`, {
     method: "GET",
     credentials: "include",
@@ -88,6 +88,20 @@ export default async function getUserByDNI(dni) {
     console.error("getUserByDNI error:", msg);
     return null; // Devuelve null para que funcione notFound()
   } else {
+    return await res.json();
+  }
+}
+
+export async function cambiarRol(id) {
+  const res = await fetch(`http://localhost:8080/user/cambiar_rol/${id}`, {
+    method: "PUT",
+    credentials: "include",
+  });
+  if (!res.ok) {
+    const msg = await res.text();
+    throw new Error(`Error al cambiar el rol: ${msg}`);
+  } else {
+    console.log("cambiarRol response:", res);
     return await res.json();
   }
 }

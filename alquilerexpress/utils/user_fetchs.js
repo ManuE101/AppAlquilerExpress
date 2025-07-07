@@ -8,7 +8,6 @@ export async function getUser(token) {
   });
   if (!res.ok) {
     const msg = await res.text();
-    console.error("getUser error:", msg);
     return null; // Devuelve null para que funcione notFound()
   } else {
     return await res.json();
@@ -42,3 +41,53 @@ export async function eliminarEmpleado(id) {
     return await res.json();
   }
 } 
+
+export async function editarEmpleado(id,form) {
+  const res = await fetch(`http://localhost:8080/user/editar_usuario/${id}`, {
+    method: "PUT",
+    credentials: "include",
+    body: JSON.stringify(form),
+    headers: { 
+      "Content-Type": "application/json" 
+    },
+  });
+
+
+  //CHAT GPT AAAH HELP
+  if (!res.ok) {
+    const { message } = await res.json();
+
+    let errorMsg = "Error al editar el empleado.";
+
+    try {
+      const parsed = JSON.parse(message);
+      const errores = Object.values(parsed)
+        .flatMap((campo) => campo._errors || [])
+        .filter(Boolean);
+      if (errores.length > 0) {
+        errorMsg = errores.join("\n");
+      }
+    } catch (e) {
+      errorMsg = message;
+    }
+
+    throw new Error(errorMsg);
+  } else {
+    return await res.json();
+  }
+} 
+
+
+export default async function getUserByDNI(dni) {
+  const res = await fetch(`http://localhost:8080/user/get_byID?id=${dni}`, {
+    method: "GET",
+    credentials: "include",
+  });
+  if (!res.ok) {
+    const msg = await res.text();
+    console.error("getUserByDNI error:", msg);
+    return null; // Devuelve null para que funcione notFound()
+  } else {
+    return await res.json();
+  }
+}

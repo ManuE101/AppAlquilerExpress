@@ -1,15 +1,19 @@
 import Image from "next/image";
 import Card from "../../../../components/Card";
 import { getInmuebleById } from "../../../../utils/inmuebles_fetch";
+import { getUser } from "../../../../utils/user_fetchs";
 import ReservaButton from "../../../../components/ReservaButton";
 import InmuebleMap from "../../../../components/InmuebleMap";
 import CommentSection from "../../../../components/commentSeccion";
 import ReseñaSection from "../../../../components/ReseñaSection";
+import { cookies } from "next/headers";
 
 export default async function Page({ params }) {
-  const { id } = params;
+  const { id } = await params;
   const inmueble = await getInmuebleById(id);
-  console.log(inmueble.desc, id, inmueble);
+  const cookieStore = await cookies();
+  const accessToken = await cookieStore.get("access_token")?.value;
+  const user = await getUser(accessToken);
   
 
   return (
@@ -36,7 +40,7 @@ export default async function Page({ params }) {
               {inmueble.disponible ? "Disponible" : "En Refacción"}
             </span>
             <div className="mt-4">
-              <ReservaButton id_inmueble={id} />
+              <ReservaButton id_inmueble={id} rol={user?.rol} />
             </div>
           </div>
           <div className="flex flex-col gap-2 p-4 items-end w-full">

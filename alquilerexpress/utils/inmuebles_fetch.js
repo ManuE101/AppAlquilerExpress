@@ -66,7 +66,8 @@ export async function getInmuebleById(id) {
 }
 
 
-export async function hacerReserva(id_inmueble,token) {
+
+export async function hacerReserva(id_inmueble,fecha_inicio, fecha_fin,token) {
     try {
         const res = await fetch("http://localhost:8080/reserva/make_reserva", {
             method: "POST",
@@ -75,7 +76,31 @@ export async function hacerReserva(id_inmueble,token) {
                 Authorization: `Bearer ${token}`, // 👈 lo agregás acá
             },
             credentials: "include",
-            body: JSON.stringify({id_inmueble , fecha_inicio: "2023-11-01", fecha_fin: "2023-11-05"})
+            body: JSON.stringify({id_inmueble , fecha_inicio, fecha_fin})
+        });
+             if (!res.ok) {
+            // No es 2xx, obtenemos texto para debug
+            const text = await res.text();
+            console.error("Error en respuesta del backend:", res.status, text);
+            throw new Error(`Error en respuesta del backend: ${res.status}`);
+        }
+        const data = await res.json();
+        return data
+    } catch (error) {
+        console.error("Error al filtrar inmuebles:", error);
+    }
+}
+
+export async function hacerReservaPresencial(id_inmueble,fecha_inicio, fecha_fin, dni , token) {
+    try {
+        const res = await fetch("http://localhost:8080/reserva/make_reserva_presencial", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`, // 👈 lo agregás acá
+            },
+            credentials: "include",
+            body: JSON.stringify({id_inmueble , fecha_inicio, fecha_fin , dni})
         });
              if (!res.ok) {
             // No es 2xx, obtenemos texto para debug
@@ -125,11 +150,14 @@ export async function getReservasCanceladas(id_Cliente) {
     }
 }
 
-export async function checkReserva(productoId, fecha_inicio, fecha_fin) {
+export async function checkReserva(inmuebleId, fecha_inicio, fecha_fin) {
+    console.log("CHECK RESERVA:", inmuebleId, fecha_inicio, fecha_fin);
   try {
-    const res = await fetch(
-      `http://localhost:8080/reserva/check?id_inmueble=${productoId}&fecha_inicio=${fecha_inicio}&fecha_fin=${fecha_fin}`
-    );
+   const url = `http://localhost:8080/reserva/check?id_inmueble=${inmuebleId}&fecha_inicio=${fecha_inicio}&fecha_fin=${fecha_fin}`;
+    const res = await fetch(url, {
+      method: "GET",
+      credentials: "include",
+    });
 
     if (!res.ok) {
       const errorData = await res.json();

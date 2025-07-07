@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken'
 
 import express from "express"
-import User from '../models/User.js';
+import User from '../models/UserModel.js';
 
 const router = express.Router();
 import { UserRepository }  from "../repositories/user-repository.js";
@@ -105,11 +105,14 @@ router.delete("/eliminar_usuario/:id", async (req, res) => {
     if (decoded.rol !== "admin") {
       return res.status(403).json({ message: "No tienes permisos para eliminar usuarios" });
     }
-      res.json(await UserRepository.delete(req.params.id));
-    } catch (err) {
-      res.status(401).json({ message: err.message });
-    }
-  });
+
+    res.json(await UserRepository.delete(req.params.id));
+  } catch (err) {
+    res.status(401).json({ message: err.message });
+  }
+});
+
+
 
 router.post("/agregar_empleado", async (req, res) => {
   const token = req.cookies.access_token;
@@ -174,6 +177,16 @@ router.put("/editar_usuario/:id", async (req, res) => {
     res.status(400).json({ message: err.message });
   }
 });
+
+
+router.get("/get_byID", async (req, res) => { 
+  const user = await UserRepository.getUserByDNI(req.query.id);
+  if (!user) {
+    return res.status(404).json({ ok:false , message: "Usuario no encontrado" });
+  }
+  res.json({ok:true ,user});
+});
+
 
 
 router.post("/verify2FA", async (req, res) => {

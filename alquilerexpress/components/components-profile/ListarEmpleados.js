@@ -2,12 +2,16 @@
 import { useState, useEffect } from "react";
 import { getEmpleados } from "../../utils/user_fetchs";
 import CardEmpleado from "../CardEmpleado";
+import ModalEditarEmpleado from "../ModalEditarEmpleado";
 
 export default function ListarEmpleados() {
   const [empleados, setEmpleados] = useState([]);
   const [loading, setLoading] = useState(true);
   const [cartelEliminado, setCartelEliminado] = useState(false);
+  const [empleadoEdit, setEmpleadoEdit] = useState(null);
 
+
+  // ELIMINACION ELIMINACION ELIMINACION
   useEffect(() => { // tristemente como es use client no puedo usar getServerSideProps
     getEmpleados()
       .then((data) => setEmpleados(data))
@@ -21,6 +25,18 @@ export default function ListarEmpleados() {
       setEmpleados((prev) => prev.filter(e => e._id !== id));
       setCartelEliminado(false); 
     }, 600);
+  };
+
+ // EDICION EDICION EDICIOON
+    async function handleEditar(empleado) {
+      setEmpleadoEdit(empleado);
+  }
+
+   const handleSuccessEdicion = (empleadoActualizado) => {
+    console.log("Empleado actualizado:", empleadoActualizado);
+    setEmpleados((prev) =>
+      prev.map((e) => (e._id === empleadoActualizado._id ? empleadoActualizado : e))
+    );
   };
 
   return (
@@ -37,11 +53,18 @@ export default function ListarEmpleados() {
         ) : empleados && empleados.length > 0 ? (
        
             empleados.map((empleado) => (
-               <CardEmpleado empleado={empleado} key={empleado._id} onEliminado = {handleEmpleadoEliminado}/>
+               <CardEmpleado empleado={empleado} key={empleado._id} onEliminado = {handleEmpleadoEliminado} onEditar = {handleEditar}/>
             ))
         ) : (
           <p>No hay empleados registrados.</p>
         )}
+        {empleadoEdit && (
+        <ModalEditarEmpleado
+          empleado={empleadoEdit}
+          onClose={() => setEmpleadoEdit(null)}
+          onSuccess={handleSuccessEdicion}
+        />
+      )}
       </div>
     </div>
   );

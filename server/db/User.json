@@ -3,7 +3,7 @@
     "_id": "a70cd7d6-5522-46bf-9fd7-a7df17bd2331",
     "username": "yo1",
     "password": "$2b$10$XXcoRAeUK0g9IBGBgo15cOwr8MDjPfggpruDLM7ZUpBMwEQb5zFpa",
-    "rol": "cliente",
+    "rol": "admin",
     "nombre": "yo",
     "apellido": "yo",
     "correo": "yoyo@hotmail.com",
@@ -50,3 +50,4 @@
     "codigo": "621338"
   }
 ]
+

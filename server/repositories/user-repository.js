@@ -2,23 +2,9 @@ import DBLocal from "db-local"
 import crypto, { hash } from "node:crypto"
 import bcrypt from 'bcrypt'
 import { userCreateSchema , userEditSchema } from "../scheme/user-scheme.js"
-import User from "../models/User.js"
+import User from "../models/UserModel.js"
 import { send2FaEmail } from "../controllers/mailController.js"
-/*const { Schema  } = new DBLocal({ path: './db'})
 
-
-const User = Schema('User', {
-    _id: {type: String, required:true},
-    username: { type:String, required: true},
-    password: { type: String, required: true},
-    rol: {type: String, required:true},
-    nombre: { type: String },
-    apellido: { type: String },
-    correo: { type: String },
-    dni: { type: String },      // Usar string para evitar problemas con ceros a la izquierda
-    telefono: { type: String },
-    nacimiento: {type: String}
-});*/
 
 export class UserRepository{
   static async create(data) {
@@ -54,6 +40,14 @@ export class UserRepository{
         return publicUser
     }
 
+    static async getUserByDNI(dni) {
+        const user = await User.findOne({dni : dni})
+        if(!user)  throw new Error('No existe tal usuario con ese DNI')
+        const {password: _, ...publicUser} = user //saco la contraseña
+        return publicUser
+        }
+
+
     static async login({username , password}) {
         const user = await  User.findOne({username})
         if(!user) throw new Error('No existe tal usuario')
@@ -63,6 +57,7 @@ export class UserRepository{
         const isValid = await bcrypt.compare(password, user.password) //la encripta y compara con la encriptada
         if(!isValid) throw new Error('Contraseña invalida')
         
+            /*
         if (user.rol === 'admin') {
             const code = Math.floor(100000 + Math.random() * 900000).toString(); // 6 dígitos
 
@@ -73,7 +68,7 @@ export class UserRepository{
 
             return { requires2FA: true, username: user.username };
         }
-        
+         */
         const {password: _ , ...publicUser} = user   
         return publicUser
     }
@@ -122,6 +117,6 @@ export class UserRepository{
         usuario.telefono = telefono ?? usuario.telefono;
 
         await usuario.save();
-        return { ok: true, message: "Los datos del usuario han sido actualizados correctamente." };
+        return { ok: true, message: "Los datos del usuario han sido actualizados correctamente." , user: usuario };
     }
 }

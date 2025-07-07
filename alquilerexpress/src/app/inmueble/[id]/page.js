@@ -4,6 +4,7 @@ import { getInmuebleById } from "../../../../utils/inmuebles_fetch";
 import ReservaButton from "../../../../components/ReservaButton";
 import InmuebleMap from "../../../../components/InmuebleMap";
 import CommentSection from "../../../../components/commentSeccion";
+import ReseñaSection from "../../../../components/ReseñaSection";
 
 export default async function Page({ params }) {
   const { id } = params;
@@ -47,6 +48,7 @@ export default async function Page({ params }) {
           </div>
         </div>
       <CommentSection inmuebleId={id} />
+      <ReseñaSection inmuebleId={id} />
       </div>
     </div>
   );

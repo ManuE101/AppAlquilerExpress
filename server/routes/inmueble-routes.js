@@ -1,5 +1,6 @@
 import express from "express";
 import { InmuebleRepository } from "../repositories/inmueble-repository.js";
+import jwt from "jsonwebtoken";
 
 const router = express.Router();
 
@@ -9,10 +10,55 @@ router.post("/create_inmueble", async (req, res) => {
 
     try {
         const id = await InmuebleRepository.create({ titulo, desc, puntaje, precio, habitaciones, domicilio, imagen });
-        res.send("Inmueble creado");
+        res.send({id});
     } catch (error) {
         res.status(400).send(error.message);
     }
+});
+
+router.put("/update_inmueble/:id", async (req, res) => {
+    const { id } = req.params;
+    console.log("ID recibido para actualizar:", id);
+    const { titulo, desc, puntaje, precio, habitaciones, domicilio, imagen } = req.body;
+    const token = req.cookies.access_token;
+    if (!token) {
+        return res.status(401).json({ message: "No autorizado" });
+    }
+    try {
+        const decoded = jwt.verify(token, "boca");
+        if (decoded.rol !== "admin") {
+            return res.status(403).json({ message: "No tienes permisos para editar inmuebles" });
+        }
+        const result = await InmuebleRepository.update(id, { titulo, desc, puntaje, precio, habitaciones, domicilio, imagen });
+        if (result.ok) {   
+            return res.json(result);
+        } else {
+            return res.status(400).json({ message: "Error al actualizar el inmueble" });
+        }
+    } catch (err) {
+        return res.status(401).json({ message: err.message });
+    }
+});
+
+router.delete("/delete_inmueble/:id", async (req, res) => {
+    const { id } = req.params;
+    const token = req.cookies.access_token;
+  if (!token) {
+    return res.status(401).json({ message: "No autorizado" });
+  }
+  try {
+    const decoded = jwt.verify(token, "boca");
+    if (decoded.rol !== "admin") {
+      return res.status(403).json({ message: "No tienes permisos para eliminar inmuebles" });
+    }
+    const result = await InmuebleRepository.delete(id);
+    if(result.ok) {
+        return res.json(result);
+    }
+  }
+  catch (err) {
+    return res.status(401).json({ message: err.message });
+  }
 });
 
 router.get("/get_Inmuebles", async (req, res) => {

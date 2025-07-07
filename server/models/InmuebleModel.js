@@ -5,6 +5,7 @@ const { Schema } = new DBLocal({ path: './db' });
 
 const Inmueble = Schema('Inmueble', {
   _id: { type: String, required: true },
+  id: {type: String, required: true, unique: true }, // MongoDB uses _id as the primary key, but we keep id for compatibility
   titulo: { type: String, required: true },
   desc: { type: String, required: true },
   puntaje: { type: Number, required: true },

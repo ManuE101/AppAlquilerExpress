@@ -15,17 +15,17 @@ export default function ModalEditarEmpleado({ empleado, onClose, onSuccess }) {
   const handleChange = e => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
-
+        
   const handleSubmit = async e => {
     e.preventDefault();
     setLoading(true);
     try {
       const actualizado = await editarEmpleado(empleado._id, form);
-      onSuccess(actualizado);
+      onSuccess(actualizado.user);
       onClose();
       alert("Los datos del empleado han sido actualizados correctamente.");
     } catch (err) {
-      alert("Error al actualizar el empleado.");
+      alert("Error al actualizar el empleado." + " " + (err.message));
     } finally {
       setLoading(false);
     }

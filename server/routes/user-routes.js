@@ -173,4 +173,12 @@ router.put("/editar_usuario/:id", async (req, res) => {
   }
 });
 
+router.get("/get_byID", async (req, res) => { 
+  const user = await UserRepository.getUserByDNI(req.query.id);
+  if (!user) {
+    return res.status(404).json({ ok:false , message: "Usuario no encontrado" });
+  }
+  res.json({ok:true ,user});
+});
+
 export default router;

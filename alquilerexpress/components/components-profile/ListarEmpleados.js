@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { getEmpleados } from "../../utils/user_fetchs";
 import CardEmpleado from "../CardEmpleado";
+import ModalEditarEmpleado from "../ModalEditarEmpleado";
 
 export default function ListarEmpleados() {
   const [empleados, setEmpleados] = useState([]);
@@ -32,6 +33,7 @@ export default function ListarEmpleados() {
   }
 
    const handleSuccessEdicion = (empleadoActualizado) => {
+    console.log("Empleado actualizado:", empleadoActualizado);
     setEmpleados((prev) =>
       prev.map((e) => (e._id === empleadoActualizado._id ? empleadoActualizado : e))
     );

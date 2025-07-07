@@ -37,6 +37,7 @@ app.use((req,res,next ) => {
 app.use("/user", userRoutes);        // Tus endpoints de usuario estarán bajo /user
 app.use("/inmueble", inmuebleRoutes); // Tus endpoints de inmueble bajo /inmueble
 app.use("/reserva", reservasRoutes);
+app.use("/comentario", comentarioRoutes);
 
 
 app.listen(PORT , () => {
@@ -46,5 +47,4 @@ app.use((req,res) => {
     res.status(404).send('<h1> Boca </h1>')
 })
 
-app.use("/comentario", comentarioRoutes);
 

@@ -2,17 +2,18 @@ import DBLocal from "db-local"
 import dayjs from 'dayjs'
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore.js';
 dayjs.extend(isSameOrBefore);
+import User from "../models/UserModel.js";
+import Reserva from "../models/ReservaModel.js";
 
-const { Schema } = new DBLocal({path: './db'})
 
-const Reserva = Schema('Reserva', {
-    _id: {type: String, required:true},
-    inmueble_id: {type: String, required:true},
-    user_id: {type: String, required:true},
-    estado: {type: String, required:true},
-    fecha_inicio: {type: Date, required:true},
-    fecha_fin: {type:Date, required:true}
-})
+
+
+function calcularMonto(fecha_inicio, fecha_fin, precio_por_dia) {
+  const inicio = dayjs(fecha_inicio);
+  const fin = dayjs(fecha_fin);
+  const dias = fin.diff(inicio, 'day'); // día de fin no incluido
+  return dias * precio_por_dia;
+}
 
 function sobrepone(ini, fin, a, b){
     const iA = dayjs(ini);
@@ -68,5 +69,40 @@ export class ReservaRepository{
   }
   return { ok: true };
 }
+static async createPresencial({ id_inmueble, fecha_inicio, fecha_fin, dni , precio }) {
+    // Buscar cliente por DNI
+console.log("DNI recibido para búsqueda:", dni);
+    let cliente = await User.findOne({ dni});
+    if (!cliente) {
+      return { ok: false, error: 'Cliente no encontrado' };
+    }
+    const reservas = await Reserva.find({ inmueble_id: id_inmueble });
+    if (checkSobrepone(fecha_inicio, fecha_fin, reservas)) {
+      return { ok: false, error: 'La reserva se superpone con otra existente' };
+    }
 
+
+    const idX = crypto.randomUUID();
+    await Reserva.create({
+        _id: idX,
+        inmueble_id: id_inmueble,
+        user_id: cliente._id,
+        estado: 'activa',
+        fecha_inicio,
+        fecha_fin,
+    }).save();
+    
+    const monto = calcularMonto(fecha_inicio, fecha_fin, precio);
+    return {
+      ok: true,
+      reserva: {
+        id: idX,
+        inmueble_id: id_inmueble,
+        user_id: cliente._id,
+        fecha_inicio,
+        fecha_fin,
+      },
+      monto,
+    };
+    }
 }

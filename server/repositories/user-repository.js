@@ -2,23 +2,8 @@ import DBLocal from "db-local"
 import crypto, { hash } from "node:crypto"
 import bcrypt from 'bcrypt'
 import { userCreateSchema , userEditSchema } from "../scheme/user-scheme.js"
+import User from "../models/UserModel.js";
 
-
-const { Schema  } = new DBLocal({ path: './db'})
-
-
-const User = Schema('User', {
-    _id: {type: String, required:true},
-    username: { type:String, required: true},
-    password: { type: String, required: true},
-    rol: {type: String, required:true},
-    nombre: { type: String },
-    apellido: { type: String },
-    correo: { type: String },
-    dni: { type: String },      // Usar string para evitar problemas con ceros a la izquierda
-    telefono: { type: String },
-    nacimiento: {type: String}
-});
 
 export class UserRepository{
   static async create(data) {
@@ -53,6 +38,14 @@ export class UserRepository{
         const {password: _, ...publicUser} = user //saco la contraseña
         return publicUser
     }
+
+    static async getUserByDNI(dni) {
+        const user = await User.findOne({dni : dni})
+        if(!user)  throw new Error('No existe tal usuario con ese DNI')
+        const {password: _, ...publicUser} = user //saco la contraseña
+        return publicUser
+        }
+
 
     static async login({username , password}) {
         const user =await  User.findOne({username})
@@ -111,6 +104,6 @@ export class UserRepository{
         usuario.telefono = telefono ?? usuario.telefono;
 
         await usuario.save();
-        return { ok: true, message: "Los datos del usuario han sido actualizados correctamente." };
+        return { ok: true, message: "Los datos del usuario han sido actualizados correctamente." , user: usuario };
     }
 }

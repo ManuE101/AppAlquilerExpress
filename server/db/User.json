@@ -1,5 +1,17 @@
 [
   {
+    "_id": "d97eb4c3-aff7-4d7b-9af2-846384ff8b53",
+    "username": "Prueba 3",
+    "password": "$2b$10$3ibZaw8E.wR1oGdMKyqgveQpXkbEKNYVmVpas38QsZHsju2z99VOa",
+    "rol": "cliente",
+    "nombre": "Prueba",
+    "apellido": "Tres",
+    "correo": "prueba3@gmail.com",
+    "dni": "21345678",
+    "telefono": "2241571283",
+    "nacimiento": "2000-12-12"
+  },
+  {
     "_id": "6959a22a-7f54-4053-9054-edab9b7687b5",
     "username": "Roman",
     "password": "$2b$10$p5Brq9I.rvkSoICse5EiZu5TyqjinJUqbf3XyfrsIZb7amaGXYcsq",

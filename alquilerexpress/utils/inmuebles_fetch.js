@@ -1,3 +1,46 @@
+export async function agregarInmueble({titulo,desc, puntaje, precio, habitaciones, domicilio, imagen}) {
+    const res = await fetch("http://localhost:8080/inmueble/create_inmueble", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({titulo, desc, puntaje, precio, habitaciones, domicilio, imagen })
+    });
+    if (!res.ok) {
+        const msg = await res.text();
+        throw new Error(msg);
+    } else {
+        return await res.json();
+    }
+}
+
+export async function editarInmueble(id, {titulo, desc, puntaje, precio, habitaciones, domicilio, imagen}) {
+    const res = await fetch(`http://localhost:8080/inmueble/update_inmueble/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({titulo, desc, puntaje, precio, habitaciones, domicilio, imagen })
+    });
+    if (!res.ok) {
+        const msg = await res.text();
+        throw new Error(msg);
+    } else {
+        return await res.json();
+    }
+}
+
+export async function eliminarInmueble(id) { 
+    const res = await fetch(`http://localhost:8080/inmueble/delete_inmueble/${id}`, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include"
+    });
+    if (!res.ok) {
+        const msg = await res.text();
+        throw new Error(msg);
+    } else {
+        return await res.json();
+    }
+}
 
 
 export async function getInmuebles() {

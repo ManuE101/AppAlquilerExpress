@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { useState } from "react";
 import ListarEmpleados from './ListarEmpleados';
 import ListarInmuebles from "./ListarInmuebles";
-
+import Estadisticas from './Estadisticas';
 
 
 export default function AdminProfile({user}) {
@@ -33,6 +33,17 @@ export default function AdminProfile({user}) {
       )}
       {mostrar === "inmuebles" && (
         <ListarInmuebles/>
+      )}
+
+      <button
+      className="mt-4 px-4 py-2 bg-purple-500 text-white rounded"
+      onClick={() => setMostrar(mostrar === "estadisticas" ? null : "estadisticas")}
+      > 
+        Ver Estadísticas
+      </button>
+
+      {mostrar === "estadisticas" && (
+        <Estadisticas />
       )}
     </div>
   );

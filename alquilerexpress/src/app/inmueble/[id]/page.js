@@ -46,7 +46,7 @@ export default async function Page({ params }) {
             </div>
           </div>
         </div>
-      <CommentSection />
+      <CommentSection inmuebleId={id} />
       </div>
     </div>
   );

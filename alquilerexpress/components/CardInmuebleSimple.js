@@ -11,6 +11,8 @@ export default function CardInmuebleSimple({ inmueble , onEliminar, onEditar }) 
       onEliminar(inmueble._id); // Llama a la función onEliminar pasada como prop
      }
     catch (error) {
+       const parsed = JSON.parse(error.message);
+       alert(parsed.message);
       console.error("Error al eliminar el inmueble:", error);
     }}
 

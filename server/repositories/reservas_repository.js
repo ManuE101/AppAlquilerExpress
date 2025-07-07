@@ -140,4 +140,11 @@ console.log("DNI recibido para búsqueda:", dni);
         } 
         return total;
     }
+
+    static async hayReservaId(id_inm){
+        const reservas = await Reserva.find();
+        const existe = reservas.some(reserva => reserva.inmueble_id === id_inm);
+        console.log(existe);
+        return existe;
+    }
 }

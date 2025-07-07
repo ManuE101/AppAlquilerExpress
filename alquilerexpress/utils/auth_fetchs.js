@@ -24,6 +24,7 @@ export async function loginFetch(username,password) {
       })
 
       if (!res.ok) {
+        console.log(res)
         const msg = await res.text()
         throw new Error(msg)
       }

@@ -1,1 +1,40 @@
-[]
+[
+  [],
+  [
+    {
+      "id": 1751847210508,
+      "user": "Prueba",
+      "text": "q onda ",
+      "respuestas": [
+        {
+          "id": 1751847231982,
+          "user": "yo1",
+          "text": "todo tranqui?\n",
+          "fecha": "2025-07-07T00:13:51.982Z"
+        }
+      ],
+      "fecha": "2025-07-07T00:13:30.508Z"
+    },
+    {
+      "id": 1751847338370,
+      "user": "Prueba 2",
+      "text": "holi yo tambien",
+      "respuestas": [
+        {
+          "id": 1751857510647,
+          "user": "1234",
+          "text": "cualquiera",
+          "fecha": "2025-07-07T03:05:10.647Z"
+        }
+      ],
+      "fecha": "2025-07-07T00:15:38.370Z"
+    },
+    {
+      "id": 1751858425405,
+      "user": "Prueba 2",
+      "text": "holas",
+      "respuestas": [],
+      "fecha": "2025-07-07T03:20:25.405Z"
+    }
+  ]
+]

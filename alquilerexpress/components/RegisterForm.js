@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { registerFetch } from "../utils/auth_fetchs";
 
-export default function RegisterForm() {
+export default function RegisterForm({tagBoton}) {
   const [fieldErrors, setFieldErrors] = useState({});
 
   function parseZodErrors(errorString) {
@@ -32,7 +32,7 @@ export default function RegisterForm() {
     const isOver18 = today >= new Date(birth.setFullYear(birth.getFullYear() + 18));
 
     if (!isOver18) {
-      setFieldErrors({ nacimiento: "Debes tener al menos 18 años para registrarte." });
+      setFieldErrors({ nacimiento: "La fecha ingresada no corresponde a alguien mayor de 18 años" });
       return;
     }
 
@@ -77,11 +77,11 @@ export default function RegisterForm() {
 
       <label className="text-md">Fecha de nacimiento</label>
       <input type="date" name="nacimiento" className={inputClass("nacimiento")} required />
-      {fieldErrors.nacimiento && <span className="text-red-500 text-xs">{fieldErrors.nacimiento}</span>}
+      {fieldErrors.nacimiento && <span className="text-red-500 text-xs ">{fieldErrors.nacimiento}</span>}
 
       <input type="hidden" name="rol" value="cliente" />
       <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">
-        Registrarse
+        {tagBoton || "Registrarse"}
       </button>
     </form>
   );
